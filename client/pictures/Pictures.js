@@ -36,6 +36,8 @@ const useStyles = makeStyles(theme => ({
 export default function Pictures() {
 
     const classes = useStyles();
+    const [images, setImages] = useState([]);
+    const [comments, setComments] = useState([]);
     const [uploadValues, setValues] = useState({
         title: '',
         url: '',
@@ -95,7 +97,14 @@ export default function Pictures() {
                                 Submit
                             </Button>
                         </CardActions>
+                        <hr />
+                        <List>
+                            {images.map((item,i) => {
+                                
+                            })}
+                        </List>
                     </Card>
+
                     
                 </span>)
             }
