@@ -1,6 +1,7 @@
 import React from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
+import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import HomeIcon from '@material-ui/icons/Home';
@@ -28,18 +29,25 @@ const Menu = withRouter(({ history }) => (
 			<Link to="/users">
 				<Button style={isActive(history, "/users")}>Users</Button>
 			</Link>
+			<Link to="/pictures">
+				<Button style={isActive(history, "/pictures")}>Pictures</Button>
+			</Link>
+
 			{
 				!auth.isAuthenticated() && (<span>
-					<Link to="/signup">
-						<Button style={isActive(history, "/signup")}>
-							Sign up
-						</Button>
-					</Link>
-					<Link to="/signin">
-						<Button style={isActive(history, "/signin")}>
-							Sign In
-						</Button>
-					</Link>
+					<Box justify='right'>
+						<Link to="/signup">
+							<Button style={isActive(history, "/signup")}>
+								Sign up
+							</Button>
+						</Link>
+						<Link to="/signin">
+							<Button style={isActive(history, "/signin")}>
+								Sign In
+							</Button>
+						</Link>
+					</Box>
+
 				</span>)
 			}
 			{
@@ -51,7 +59,9 @@ const Menu = withRouter(({ history }) => (
 					</Link>
 					<Button color="inherit" onClick={() => {
 						auth.clearJWT(() => history.push('/'))
-					}}>Sign out</Button>
+					}}>
+						Sign out
+					</Button>
 				</span>)
 			}
 		</Toolbar>
