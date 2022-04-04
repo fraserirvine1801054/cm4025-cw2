@@ -15,7 +15,8 @@ import {
     Typography,
     Card,
     CardContent,
-    TextField
+    TextField,
+    CardActions
 } from '@material-ui/core';
 
 import ArrowForward from '@material-ui/icons/ArrowForward';
@@ -38,6 +39,10 @@ export default function Pictures() {
         title: '',
         url: '',
     });
+
+    const clickSubmit = () => {
+
+    }
 
     useEffect(() => {
         const abortController = new AbortController();
@@ -76,9 +81,19 @@ export default function Pictures() {
                     </Typography>
                     <Card>
                         <CardContent>
-                            <TextField id='title' label='Title' />
-                            <TextField id='img_url' label='Image URL' />
+                            <TextField id='title' label='Title' /><br />
+                            <TextField id='img_url' label='Image URL' /><br />
                         </CardContent>
+                        <CardActions>
+                            <Button 
+                                color="Primary"
+                                variant="contained"
+                                onClick={clickSubmit}
+                                className={classes.submit}
+                            >
+                                Submit
+                            </Button>
+                        </CardActions>
                     </Card>
                     
                 </span>)
