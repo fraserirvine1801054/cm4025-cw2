@@ -9,6 +9,7 @@ import Signin from './auth/Signin';
 import PrivateRoute from './auth/PrivateRoute';
 import Profile from './user/Profile';
 import EditProfile from './user/EditProfile';
+import Pictures from './pictures/Pictures';
 
 const MainRouter = () => {
     return(
@@ -18,6 +19,7 @@ const MainRouter = () => {
                 <Route exact path="/"component={Home}/>
                 <Route path="/users" component={Users}/>
                 <Route path="/useradmin/:userId" component={UserAdmin}/>
+                <Route path="/pictures" component={Pictures} />
                 <Route path="/signup" component={Signup}/>
                 <Route path="/signin" component={Signin}/>
                 <PrivateRoute path="/user/edit/:userId" component={EditProfile}/>

@@ -75,7 +75,8 @@ export default function Home() {
             </Typography>
             <CardContent>
                 <Typography variant="body1" component="p">
-                    Welcome to Lab 6 home page.
+                    Welcome to Love for the Uglies!
+                    
                     <div>
                         {jokes.joke}
                     </div>
