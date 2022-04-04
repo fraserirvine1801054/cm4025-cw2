@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import theme from '../theme.js';
 import { Link } from 'react-router-dom';
+import auth from './../auth/auth-helper';
 
 import {
     Paper,
@@ -11,7 +12,10 @@ import {
     ListItemText,
     Avatar,
     IconButton,
-    Typography
+    Typography,
+    Card,
+    CardContent,
+    TextField
 } from '@material-ui/core';
 
 import ArrowForward from '@material-ui/icons/ArrowForward';
@@ -30,7 +34,10 @@ const useStyles = makeStyles(theme => ({
 export default function Pictures() {
 
     const classes = useStyles();
-    const [users,setUsers] = useState([]);
+    const [uploadValues, setValues] = useState({
+        title: '',
+        url: '',
+    });
 
     useEffect(() => {
         const abortController = new AbortController();
@@ -55,6 +62,27 @@ export default function Pictures() {
             <Typography variant='h6' className={classes.title}>
                 Pictures
             </Typography>
+            {
+                !auth.isAuthenticated() && (<span>
+                    <Typography>
+                        Sign in to upload images
+                    </Typography>
+                </span>)
+            }
+            {
+                auth.isAuthenticated() && (<span>
+                    <Typography>
+                        Upload an image
+                    </Typography>
+                    <Card>
+                        <CardContent>
+                            <TextField id='title' label='Title' />
+                            <TextField id='img_url' label='Image URL' />
+                        </CardContent>
+                    </Card>
+                    
+                </span>)
+            }
         </Paper>
     );
 
