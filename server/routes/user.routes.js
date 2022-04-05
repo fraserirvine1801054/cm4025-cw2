@@ -20,6 +20,6 @@ router.route('/api/users/admin/:userId')
 router.param('userId', userCtrl.userByID);
 
 router.route('/api/users/name/:userId')
-    .get(userCtrl.)
+    .get(userCtrl.getName);
 
 export default router;

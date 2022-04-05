@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { listCom, createCom } from './api-pictures';
+import { listCom, createCom, getComName } from './api-pictures';
 import auth from './../auth/auth-helper';
-import { read } from './../user/api-user';
 
 import {
     List,
@@ -101,7 +100,7 @@ export default function ImageComments(props) {
                                 <Person />
                             </Avatar>
                         </ListItemAvatar>
-                        <ListItemText primary={item.comment_text} />
+                        <ListItemText primary={await getComName(item.userId)} />
                         <ListItemText primary={item.comment_text} />
                     </Box>
                 })}
@@ -112,5 +111,14 @@ export default function ImageComments(props) {
 }
 
 async function getUserName(userId) {
-    read
+    const abortController = new AbortController();
+    const signal = abortController.signal;
+
+    getComName(signal,userId).then((data) => {
+        if (data && data.error) {
+            console.log(data.error);
+        } else {
+            return data;
+        }
+    });
 }

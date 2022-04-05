@@ -117,5 +117,6 @@ export default {
     list,
     listadmin,
     remove,
-    update
+    update,
+    getName
 }
