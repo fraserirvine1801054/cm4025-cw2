@@ -43,9 +43,8 @@ export default function Pictures() {
         url: '',
     });
 
-    const clickSubmit = () => {
-
-    }
+    
+    
 
     useEffect(() => {
         const abortController = new AbortController();
