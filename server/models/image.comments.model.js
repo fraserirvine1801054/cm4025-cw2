@@ -1,8 +1,14 @@
 import mongoose from 'mongoose';
 
-const ImgSingleCommentSchema = new mongoose.Schema({
-    user_id: {
-        type: String
+const ImgCommentsSchema = new mongoose.Schema({
+
+    img_id: {
+        type: String,
+        required: 'Comment requires an image_id'
+    },
+    commenter_id: {
+        type: String,
+        required: 'Comment requires a user_id'
     },
     post_date: {
         type: Date,
@@ -10,27 +16,8 @@ const ImgSingleCommentSchema = new mongoose.Schema({
     },
     comment_text: {
         type: String,
-        required: 'Comment requires something'
-    },
-    comment_likes: {
-        type: Number
-    },
-    comment_dislikes: {
-        type: Number
+        required: 'Comment requires String'
     }
-});
-
-const ImgCommentsSchema = new mongoose.Schema({
-
-    likes: {
-        type: Number
-    },
-    dislikes: {
-        type: Number
-    },
-    comments: [ImgSingleCommentSchema]
-
-
 });
 
 const imgCommentsModel = mongoose.model('ImgComments', ImgCommentsSchema);

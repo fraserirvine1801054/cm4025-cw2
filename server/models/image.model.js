@@ -18,7 +18,7 @@ const ImageSchema = new mongoose.Schema({
     }
 });
 
-const imageModel = mongoose.model('User', ImageSchema);
+const imageModel = mongoose.model('Image', ImageSchema);
 imageModel.createIndexes();
 
 export default imageModel

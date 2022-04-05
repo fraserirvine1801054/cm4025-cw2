@@ -31,7 +31,7 @@ const createImage = async (req,res) => {
 
 const listComments = async (req,res) => {
     try {
-        let comments = await Comment.find().select('likes dislikes comments');
+        let comments = await Comment.find().select('img_id commenter_id post_date comment_text');
         res.json(comments);
     } catch(err) {
         return res.status(400).json({
@@ -43,7 +43,7 @@ const listComments = async (req,res) => {
 const createComment = async (req,res) => {
     const comment = new Comment(req.body);
     try {
-        await use.save();
+        await comment.save();
         return res.status(200).json({
             message: 'Successfully uploaded comment!'
         });
@@ -52,4 +52,11 @@ const createComment = async (req,res) => {
             error: errorHandler.getErrorMessage(err)
         });
     }
+}
+
+export {
+    createImage,
+    listImages,
+    createComment,
+    listComments
 }
