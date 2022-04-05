@@ -94,6 +94,22 @@ const remove = async (req,res) => {
     }
 }
 
+const getName = async (req,res,id) => {
+    try {
+        let user = await User.findById(id);
+        if (!user) {
+            return res.status('400').json({
+                error: "user not found"
+            });
+        }
+        res.json({name: user.name})
+    } catch(err) {
+        return res.status('400').json({
+            error: 'Could not retrieve user'
+        })
+    }
+}
+
 export default {
     create,
     userByID,

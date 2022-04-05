@@ -42,9 +42,21 @@ const createCom = async (comment) => {
     }
 }
 
-const listCom = async (signal) => {
+const listCom = async (signal,params) => {
     try {
-        let response = await fetch('/api/pictures/comments/', {
+        let response = await fetch('/api/pictures/comments/' + params.img_id, {
+            method: 'GET',
+            signal: signal,
+        });
+        return await response.json();
+    } catch(err) {
+        console.log(err);
+    }
+}
+
+const getComName = async (signal,params) => {
+    try {
+        let response = await fetch('/api/users/' + params.userId, {
             method: 'GET',
             signal: signal,
         });

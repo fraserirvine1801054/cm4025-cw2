@@ -7,6 +7,8 @@ import ImageComments from './ImageComments';
 
 import { listImg } from './api-pictures.js';
 
+import { read } from './../user/api-user';
+
 import {
     Paper,
     List,
@@ -38,19 +40,27 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-export default function Pictures() {
+export default function Pictures({ match }) {
 
     const classes = useStyles();
     const [images, setImages] = useState([]);
-    const [uploadValues, setValues] = useState({
-        title: '',
-        url: '',
-    });
+    const [user, setUser] = useState({});
+    const jwt = auth.isAuthenticated();
 
-    //get images to list
+
     useEffect(() => {
         const abortController = new AbortController();
         const signal = abortController.signal;
+
+        read({
+            userId: match.params.userId
+        }, { t: jwt.token }.signal).then((data) => {
+            if (data && data.error) {
+                setRedirectToSignin(true);
+            } else {
+                setUser(data);
+            }
+        });
 
         listImg(signal).then((data) => {
             if (data && data.error) {
@@ -59,7 +69,7 @@ export default function Pictures() {
                 setImages(data);
             }
         })
-    }, []);
+    }, [match.params.userId]);
 
     //get comments per image
 
@@ -105,8 +115,8 @@ export default function Pictures() {
                                             <Person />
                                         </Avatar>
                                     </ListItemAvatar>
-                                    <ListItemText primary={item.uploader}/>
-                                    <ListItemText primary={item.uploaded}/>
+                                    <ListItemText primary={item.uploader} />
+                                    <ListItemText primary={item.uploaded} />
                                     <Typography>
                                         {item.image_title}
                                     </Typography>
@@ -116,7 +126,10 @@ export default function Pictures() {
                                         alt='new'
                                     />
                                     <hr />
-                                    <ImageComments/>
+                                    <ImageComments 
+                                        userId={user._id}
+                                        imgId={item._id}
+                                    />
                                 </Card>
                             })
                             }

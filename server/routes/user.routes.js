@@ -1,6 +1,7 @@
 import express from 'express';
 import userCtrl from '../controllers/user.controller';
 import authCtrl from '../controllers/auth.controller';
+import { useResolvedPath } from 'react-router';
 
 const router = express.Router();
 
@@ -17,5 +18,8 @@ router.route('/api/users/admin/:userId')
     .get(authCtrl.requireSignin, authCtrl.hasAdminAuthorization, userCtrl.listadmin);
 
 router.param('userId', userCtrl.userByID);
+
+router.route('/api/users/name/:userId')
+    .get(userCtrl.)
 
 export default router;

@@ -29,9 +29,11 @@ const createImage = async (req,res) => {
     }
 }
 
+//id is used to identify image
 const listComments = async (req,res) => {
     try {
-        let comments = await Comment.find().select('img_id commenter_id post_date comment_text');
+        let img_id = req.params.img_id;
+        let comments = await Comment.find({img_id : img_id}).select('img_id commenter_id post_date comment_text')
         res.json(comments);
     } catch(err) {
         return res.status(400).json({

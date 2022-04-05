@@ -8,6 +8,6 @@ router.route('/api/pictures/images')
     .get(imgCtrl.listImages)
     .post(imgCtrl.createImage);
 
-router.route('/api/pictures/comments')
+router.route('/api/pictures/comments/:img_id')
     .get(imgCtrl.listComments)
     .post(imgCtrl.createComment);

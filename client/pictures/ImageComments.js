@@ -1,8 +1,9 @@
-import React, {useState, useEffect} from 'react';
-import {makeStyles} from '@material-ui/core/styles';
+import React, { useState, useEffect } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 
-import { listCom } from './api-pictures';
+import { listCom, createCom } from './api-pictures';
 import auth from './../auth/auth-helper';
+import { read } from './../user/api-user';
 
 import {
     List,
@@ -13,7 +14,8 @@ import {
     Box,
     Typography,
     CardContent,
-    CardActions
+    CardActions,
+    Avatar
 } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
@@ -27,10 +29,15 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-export default function ImageComments() {
+export default function ImageComments(props) {
 
     const classes = useStyles();
-    const [comments, setComments] = useState([]);
+    const [comments, setComments] = useState({
+        img_id: '',
+        commenter_id: '',
+        post_date: '',
+        comment_text: ''
+    });
 
     useEffect(() => {
         const abortController = new AbortController();
@@ -50,11 +57,21 @@ export default function ImageComments() {
 
     const clickSubmit = () => {
         const comment = {
-            
+            img_id: props.imgId,
+            commenter_id: props.userId,
+            post_date: '',
+            comment_text: ''
         }
+        createCom(comment).then((data) => {
+            if (data.error) {
+                setComments({ ...comments, error: data.error });
+            } else {
+                setComments({ ...comments, error: '', open: true });
+            }
+        });
     }
 
-    return(
+    return (
         <Box>
             {
                 !auth.isAuthenticated() && (<span>
@@ -75,7 +92,25 @@ export default function ImageComments() {
                     </Card>
                 </span>)
             }
+            <hr />
+            <List dense>
+                {comments.map((item, i) => {
+                    <Box>
+                        <ListItemAvatar>
+                            <Avatar>
+                                <Person />
+                            </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText primary={item.comment_text} />
+                        <ListItemText primary={item.comment_text} />
+                    </Box>
+                })}
+            </List>
         </Box>
     )
 
+}
+
+async function getUserName(userId) {
+    read
 }
