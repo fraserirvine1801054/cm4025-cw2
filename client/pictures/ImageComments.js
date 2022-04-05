@@ -100,7 +100,7 @@ export default function ImageComments(props) {
                                 <Person />
                             </Avatar>
                         </ListItemAvatar>
-                        <ListItemText primary={getComName(item.userId)} />
+                        <ListItemText primary={await getUserName(item.userId)} />
                         <ListItemText primary={item.comment_text} />
                     </Box>
                 })}
