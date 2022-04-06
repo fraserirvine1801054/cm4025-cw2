@@ -56,8 +56,8 @@ export default function ImageComments(props) {
 
     const clickSubmit = () => {
         const comment = {
-            img_id: props.imgId,
-            commenter_id: props.userId,
+            img_id: props.imgId || 'err',
+            commenter_id: props.userId || 'err',
             post_date: '',
             comment_text: ''
         }

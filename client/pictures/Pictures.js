@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import auth from './../auth/auth-helper';
 import ImageComments from './ImageComments';
 
-import { listImg } from './api-pictures.js';
+import { listImg, createImg } from './api-pictures.js';
 
 import { read } from './../user/api-user';
 
@@ -43,7 +43,12 @@ const useStyles = makeStyles(theme => ({
 export default function Pictures({ match }) {
 
     const classes = useStyles();
-    const [images, setImages] = useState([]);
+    const [images, setImages] = useState({
+        image_url: '',
+        image_title: '',
+        uploader: '',
+        uploaded: ''
+    });
     const [user, setUser] = useState({});
     const jwt = auth.isAuthenticated();
 
@@ -54,7 +59,7 @@ export default function Pictures({ match }) {
 
         read({
             userId: match.params.userId
-        }, { t: jwt.token }.signal).then((data) => {
+        }, { t: jwt.token }, signal).then((data) => {
             if (data && data.error) {
                 setRedirectToSignin(true);
             } else {
@@ -62,6 +67,7 @@ export default function Pictures({ match }) {
             }
         });
 
+        /*
         listImg(signal).then((data) => {
             if (data && data.error) {
                 console.log(data.error);
@@ -69,11 +75,30 @@ export default function Pictures({ match }) {
                 setImages(data);
             }
         })
+        */
     }, [match.params.userId]);
 
-    //get comments per image
+    const handleChange = name => event => {
+        setImages({ ...images, [name]: event.target.value})
+    }
 
-
+    const clickSubmit = () => {
+        const image = {
+            image_url: images.img_url,
+            image_title: images.img_title,
+            uploader: user,
+            uploaded: Date.now()
+        }
+        console.log(image);
+        createImg(image).then((data) => {
+            if (data.error) {
+                setImages({ ...images, error: data.error});
+            } else {
+                setImages({ ...images, error: '', open: true});
+            }
+        });
+    }
+    
     return (
         <Paper className={classes.root} elevation={4}>
             <Typography variant='h6' className={classes.title}>
@@ -93,53 +118,32 @@ export default function Pictures({ match }) {
                     </Typography>
                     <Card>
                         <CardContent>
-                            <TextField id='title' label='Title' /><br />
-                            <TextField id='img_url' label='Image URL' /><br />
+                            <TextField 
+                                id='img_title' 
+                                label='Title' 
+                                value={images.img_title}
+                                onChange={handleChange('img_title')}
+                            /> <br />
+                            <TextField
+                                id='img_url'
+                                label='Image URL'
+                                value={images.img_url}
+                                onChange={handleChange('img_url')}
+                            /> <br />
                         </CardContent>
                         <CardActions>
                             <Button
-                                color="Primary"
+                                color="primary"
                                 variant="contained"
                                 onClick={clickSubmit}
-                                className={classes.submit}
                             >
                                 Submit
                             </Button>
                         </CardActions>
-                        <hr />
-                        <List>
-                            {images.map((item, i) => {
-                                <Card>
-                                    <ListItemAvatar>
-                                        <Avatar>
-                                            <Person />
-                                        </Avatar>
-                                    </ListItemAvatar>
-                                    <ListItemText primary={item.uploader} />
-                                    <ListItemText primary={item.uploaded} />
-                                    <Typography>
-                                        {item.image_title}
-                                    </Typography>
-                                    <hr />
-                                    <img
-                                        src={item.image_url}
-                                        alt='new'
-                                    />
-                                    <hr />
-                                    <ImageComments 
-                                        userId={user._id}
-                                        imgId={item._id}
-                                    />
-                                </Card>
-                            })
-                            }
-                        </List>
                     </Card>
-
-
                 </span>)
             }
-        </Paper>
+        </Paper >
     );
 
 }

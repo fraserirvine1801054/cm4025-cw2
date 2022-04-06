@@ -102,11 +102,11 @@ const getName = async (req,res,id) => {
                 error: "user not found"
             });
         }
-        res.json({name: user.name})
+        res.json({name: user.name});
     } catch(err) {
         return res.status('400').json({
             error: 'Could not retrieve user'
-        })
+        });
     }
 }
 
