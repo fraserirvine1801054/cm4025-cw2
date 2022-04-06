@@ -46,9 +46,6 @@ export default function Pictures({ match }) {
         uploader: '',
         uploaded: ''
     });
-    const [user, setUser] = useState({});
-    //const jwt = auth.isAuthenticated();
-    //const [redirectToSignin, setRedirectToSignin] = useState(false);
 
     useEffect(() => {
         console.log("useeffect called");

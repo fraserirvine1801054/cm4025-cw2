@@ -22,3 +22,5 @@ const ImgCommentsSchema = new mongoose.Schema({
 
 const imgCommentsModel = mongoose.model('ImgComments', ImgCommentsSchema);
 imgCommentsModel.createIndexes();
+
+export default imgCommentsModel;

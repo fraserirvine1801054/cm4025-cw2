@@ -7,7 +7,7 @@ const fs = require('fs');
 
 //connection URL
 mongoose.Promise = global.Promise;
-mongoose.connect(config.mongoUri, { dbName: "users" });
+mongoose.connect(config.mongoUri, { dbName: "cm4025-cw2" });
 mongoose.connection.on('error', err => {
     throw new Error(`unable to connect to database: ${config.mongoUri}` + err);
 });
