@@ -9,6 +9,7 @@ const createImg = async (picture) => {
             },
             body: JSON.stringify(picture)
         });
+        return await response.json();
     } catch(err) {
         console.log(err);
     }

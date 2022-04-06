@@ -7,8 +7,6 @@ import ImageComments from './ImageComments';
 
 import { listImg, createImg } from './api-pictures.js';
 
-import { read } from './../user/api-user';
-
 import {
     Paper,
     List,
@@ -27,7 +25,6 @@ import {
 } from '@material-ui/core';
 
 import ArrowForward from '@material-ui/icons/ArrowForward';
-import { SettingsBackupRestoreSharp } from '@material-ui/icons';
 
 const useStyles = makeStyles(theme => ({
     root: theme.mixins.gutters({
@@ -50,22 +47,13 @@ export default function Pictures({ match }) {
         uploaded: ''
     });
     const [user, setUser] = useState({});
-    const jwt = auth.isAuthenticated();
-
+    //const jwt = auth.isAuthenticated();
+    //const [redirectToSignin, setRedirectToSignin] = useState(false);
 
     useEffect(() => {
+        console.log("useeffect called");
         const abortController = new AbortController();
         const signal = abortController.signal;
-
-        read({
-            userId: match.params.userId
-        }, { t: jwt.token }, signal).then((data) => {
-            if (data && data.error) {
-                setRedirectToSignin(true);
-            } else {
-                setUser(data);
-            }
-        });
 
         /*
         listImg(signal).then((data) => {
@@ -76,6 +64,10 @@ export default function Pictures({ match }) {
             }
         })
         */
+
+        return function cleanup() {
+            abortController.abort();
+        }
     }, [match.params.userId]);
 
     const handleChange = name => event => {
@@ -86,7 +78,7 @@ export default function Pictures({ match }) {
         const image = {
             image_url: images.img_url,
             image_title: images.img_title,
-            uploader: user,
+            uploader: auth.isAuthenticated().user._id,
             uploaded: Date.now()
         }
         console.log(image);
@@ -98,7 +90,7 @@ export default function Pictures({ match }) {
             }
         });
     }
-    
+
     return (
         <Paper className={classes.root} elevation={4}>
             <Typography variant='h6' className={classes.title}>
