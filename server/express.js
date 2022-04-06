@@ -4,7 +4,7 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import compress from 'compression';
 import cors from 'cors';
-import helmet from 'helmet';
+import * as helmet from 'helmet';
 import Template from './../template';
 import userRoutes from './routes/user.routes';
 import authRoutes from './routes/auth.routes';
@@ -40,7 +40,14 @@ app.use(bodyParser.urlencoded({extended : true}));
 app.use(cookieParser());
 app.use(compress());
 //secure apps by setting various http headers
-app.use(helmet());
+app.use(helmet({
+    contentSecurityPolicy: {
+        directives: {
+            ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+            "img-src": ["'self'", "i.imgur.com","cdn.discordapp.com"],
+        },
+    },
+}));
 app.use(cors());
 
 app.use('/', userRoutes);

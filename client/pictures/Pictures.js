@@ -146,12 +146,12 @@ export default function Pictures() {
                             title={item.image_title}
                             subheader={item.uploaded}
                         />
-                        <CardMedia
-                            component="img"
-                            alt="new"
-                            hieght="140"
-                            image={item.image_url}
-                        />
+                        <div>
+                            <img 
+                                src={item.image_url}
+                                alt="new"
+                            />
+                        </div>
                     </Card>
                 )
             })
