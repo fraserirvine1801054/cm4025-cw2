@@ -40,6 +40,7 @@ app.use(bodyParser.urlencoded({extended : true}));
 app.use(cookieParser());
 app.use(compress());
 //secure apps by setting various http headers
+/*
 app.use(helmet({
     contentSecurityPolicy: {
         directives: {
@@ -48,6 +49,20 @@ app.use(helmet({
         },
     },
 }));
+*/
+app.use(
+    helmet.contentSecurityPolicy({
+        directives: {
+            imgSrc: [
+                "'self'",
+                'https://i.imgur.com',
+                'https://cdn.discordapp.com',
+                'https://i.redd.it'
+            ]
+        }
+    })
+)
+
 app.use(cors());
 
 app.use('/', userRoutes);
