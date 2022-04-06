@@ -25,7 +25,8 @@ import {
     Button,
     ListItemAvatar,
     Grid,
-    GridList
+    GridList,
+    CardMedia
 } from '@material-ui/core';
 
 import ArrowForward from '@material-ui/icons/ArrowForward';
@@ -45,6 +46,10 @@ export default function Pictures() {
 
     const classes = useStyles();
     const [images, setImages] = useState([]);
+    const [values, setValues] = useState({
+        img_url: '',
+        img_title: ''
+    });
 
     useEffect(() => {
         console.log("useeffect called");
@@ -65,25 +70,23 @@ export default function Pictures() {
         }
     }, []);
 
-    console.log(images);
-
     const handleChange = name => event => {
-        setImages({ ...images, [name]: event.target.value })
+        setValues({ ...values, [name]: event.target.value })
     }
 
     const clickSubmit = () => {
         const image = {
-            image_url: images.img_url,
-            image_title: images.img_title,
+            image_url: values.img_url,
+            image_title: values.img_title,
             uploader: auth.isAuthenticated().user._id,
             uploaded: Date.now()
         }
         console.log(image);
         createImg(image).then((data) => {
             if (data.error) {
-                setImages({ ...images, error: data.error });
+                setValues({ ...values, error: data.error });
             } else {
-                setImages({ ...images, error: '', open: true });
+                setValues({ ...values, error: '', open: true });
             }
         });
     }
@@ -110,13 +113,13 @@ export default function Pictures() {
                             <TextField
                                 id='img_title'
                                 label='Title'
-                                value={images.img_title}
+                                value={values.img_title}
                                 onChange={handleChange('img_title')}
                             /> <br />
                             <TextField
                                 id='img_url'
                                 label='Image URL'
-                                value={images.img_url}
+                                value={values.img_url}
                                 onChange={handleChange('img_url')}
                             /> <br />
                         </CardContent>
@@ -132,28 +135,28 @@ export default function Pictures() {
                     </Card>
                 </span>)
             }
-            <GridList
-                cols={1}
-            >
-                {images.map((item, i) => {
-                    console.log(item);
-                    return(
-                        <Card>
+
+            {images.map((item, i) => {
+                return (
+                    <Card key={i}>
                         <CardHeader
+                            avatar={
+                                <Avatar />
+                            }
                             title={item.image_title}
                             subheader={item.uploaded}
                         />
-                        <div>
-                        <img
-                            src={item.image_url}
+                        <CardMedia
+                            component="img"
                             alt="new"
+                            hieght="140"
+                            image={item.image_url}
                         />
-                        </div>
                     </Card>
-                    )
-                })
-                }
-            </GridList>
+                )
+            })
+            }
+
         </Paper >
     );
 }
