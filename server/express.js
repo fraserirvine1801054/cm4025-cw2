@@ -10,6 +10,7 @@ import userRoutes from './routes/user.routes';
 import authRoutes from './routes/auth.routes';
 import imgRoutes from './routes/image.routes';
 import devBundle from './devBundle';
+import directives from './express-csp';
 //modules for server side rendering
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
@@ -51,16 +52,7 @@ app.use(helmet({
 }));
 */
 app.use(
-    helmet.contentSecurityPolicy({
-        directives: {
-            imgSrc: [
-                "'self'",
-                'https://i.imgur.com',
-                'https://cdn.discordapp.com',
-                'https://i.redd.it'
-            ]
-        }
-    })
+    helmet.contentSecurityPolicy(directives)
 )
 
 app.use(cors());
