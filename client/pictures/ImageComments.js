@@ -109,7 +109,7 @@ export default function ImageComments(props) {
     )
 
 }
-
+/*
 async function getUserName(userId) {
     const abortController = new AbortController();
     const signal = abortController.signal;
@@ -122,3 +122,4 @@ async function getUserName(userId) {
         }
     });
 }
+*/

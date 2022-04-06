@@ -46,6 +46,8 @@ export default function Users() {
         }
     },[]);
 
+    console.log(users);
+
     return(
         <Paper className={classes.root} elevation={4}>
             <Typography variant='h6' className={classes.title}>

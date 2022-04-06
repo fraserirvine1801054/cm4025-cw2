@@ -95,6 +95,8 @@ const remove = async (req,res) => {
 }
 
 const getName = async (req,res,id) => {
+    console.log("test getname");
+    console.log(req.params.userId);
     try {
         let user = await User.findById(id);
         if (!user) {

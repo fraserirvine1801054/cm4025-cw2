@@ -94,11 +94,24 @@ const remove = async (params, credentials) => {
     }
 }
 
+const getUserName = async (params,signal) => {
+    try {
+        let response = await fetch('/api/users/name/' + params, {
+            method: 'GET',
+            signal: signal,
+        });
+        return await response.json();
+    } catch(err) {
+        console.log(err);
+    }
+}
+
 export {
     create,
     list,
     listadmin,
     read,
     update,
-    remove
+    remove,
+    getUserName
 }

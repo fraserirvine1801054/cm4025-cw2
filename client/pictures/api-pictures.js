@@ -56,22 +56,9 @@ const listCom = async (signal,params) => {
     }
 }
 
-const getComName = async (signal,params) => {
-    try {
-        let response = await fetch('/api/users/name/' + params.userId, {
-            method: 'GET',
-            signal: signal,
-        });
-        return await response.json();
-    } catch(err) {
-        console.log(err);
-    }
-}
-
 export {
     createImg,
     listImg,
     createCom,
-    listCom,
-    getComName
+    listCom
 }

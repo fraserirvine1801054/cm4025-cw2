@@ -6,6 +6,7 @@ import auth from './../auth/auth-helper';
 import ImageComments from './ImageComments';
 
 import { listImg, createImg } from './api-pictures.js';
+import { getUserName } from './../user/api-user';
 
 import {
     Paper,
@@ -18,10 +19,13 @@ import {
     Typography,
     Card,
     CardContent,
+    CardHeader,
     TextField,
     CardActions,
     Button,
-    ListItemAvatar
+    ListItemAvatar,
+    Grid,
+    GridList
 } from '@material-ui/core';
 
 import ArrowForward from '@material-ui/icons/ArrowForward';
@@ -37,38 +41,34 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-export default function Pictures({ match }) {
+export default function Pictures() {
 
     const classes = useStyles();
-    const [images, setImages] = useState({
-        image_url: '',
-        image_title: '',
-        uploader: '',
-        uploaded: ''
-    });
+    const [images, setImages] = useState([]);
 
     useEffect(() => {
         console.log("useeffect called");
         const abortController = new AbortController();
         const signal = abortController.signal;
 
-        /*
         listImg(signal).then((data) => {
+            console.log(data);
             if (data && data.error) {
                 console.log(data.error);
             } else {
                 setImages(data);
             }
         })
-        */
 
         return function cleanup() {
             abortController.abort();
         }
-    }, [match.params.userId]);
+    }, []);
+
+    console.log(images);
 
     const handleChange = name => event => {
-        setImages({ ...images, [name]: event.target.value})
+        setImages({ ...images, [name]: event.target.value })
     }
 
     const clickSubmit = () => {
@@ -81,9 +81,9 @@ export default function Pictures({ match }) {
         console.log(image);
         createImg(image).then((data) => {
             if (data.error) {
-                setImages({ ...images, error: data.error});
+                setImages({ ...images, error: data.error });
             } else {
-                setImages({ ...images, error: '', open: true});
+                setImages({ ...images, error: '', open: true });
             }
         });
     }
@@ -107,9 +107,9 @@ export default function Pictures({ match }) {
                     </Typography>
                     <Card>
                         <CardContent>
-                            <TextField 
-                                id='img_title' 
-                                label='Title' 
+                            <TextField
+                                id='img_title'
+                                label='Title'
                                 value={images.img_title}
                                 onChange={handleChange('img_title')}
                             /> <br />
@@ -132,7 +132,47 @@ export default function Pictures({ match }) {
                     </Card>
                 </span>)
             }
+            <GridList
+                cols={1}
+            >
+                {images.map((item, i) => {
+                    console.log(item);
+                    return(
+                        <Card>
+                        <CardHeader
+                            title={item.image_title}
+                            subheader={item.uploaded}
+                        />
+                        <div>
+                        <img
+                            src={item.image_url}
+                            alt="new"
+                        />
+                        </div>
+                    </Card>
+                    )
+                })
+                }
+            </GridList>
         </Paper >
     );
+}
 
+async function getName(id) {
+    const abortController = new AbortController();
+    const signal = abortController.signal;
+
+    let currentName = '';
+
+    getUserName(id, signal).then((data) => {
+        console.log(data);
+        if (data && data.error) {
+            console.log(data.error);
+        } else {
+            currentName = data;
+        }
+    });
+    return function cleanup() {
+        abortController.abort();
+    }
 }
