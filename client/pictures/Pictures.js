@@ -56,6 +56,9 @@ export default function Pictures() {
         const abortController = new AbortController();
         const signal = abortController.signal;
 
+        let imageData;
+        let formattedData = [];
+
         listImg(signal).then((data) => {
             console.log(data);
             if (data && data.error) {
@@ -63,12 +66,26 @@ export default function Pictures() {
             } else {
                 setImages(data);
             }
-        })
+        });
 
         return function cleanup() {
             abortController.abort();
         }
     }, []);
+
+    function getName(id) {
+        const abortController = new AbortController();
+        const signal = abortController.signal;
+    
+        getUserName(id, signal).then((data) => {
+            console.log(data);
+            if (data && data.error) {
+                console.log(data.error);
+            } else {
+                return data.name;
+            }
+        });
+    }
 
     const handleChange = name => event => {
         setValues({ ...values, [name]: event.target.value })
@@ -143,9 +160,14 @@ export default function Pictures() {
                             avatar={
                                 <Avatar />
                             }
-                            title={item.image_title}
+                            title={item.uploader}
                             subheader={item.uploaded}
                         />
+                        <CardContent>
+                            <Typography>
+                                {item.image_title}
+                            </Typography>
+                        </CardContent>
                         <div>
                             <img 
                                 src={item.image_url}
@@ -161,7 +183,7 @@ export default function Pictures() {
     );
 }
 
-async function getName(id) {
+function getName(id) {
     const abortController = new AbortController();
     const signal = abortController.signal;
 
@@ -172,10 +194,9 @@ async function getName(id) {
         if (data && data.error) {
             console.log(data.error);
         } else {
-            currentName = data;
+            currentName = data.name;
         }
     });
-    return function cleanup() {
-        abortController.abort();
-    }
+
+    return currentName;
 }

@@ -94,11 +94,11 @@ const remove = async (req,res) => {
     }
 }
 
-const getName = async (req,res,id) => {
+const getName = async (req,res) => {
     console.log("test getname");
     console.log(req.params.userId);
     try {
-        let user = await User.findById(id);
+        let user = await User.findById(req.params.userId);
         if (!user) {
             return res.status('400').json({
                 error: "user not found"

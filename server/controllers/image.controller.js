@@ -1,5 +1,6 @@
 import Image from '../models/image.model';
 import Comment from '../models/image.comments.model';
+import User from './../models/user.model';
 import extend from 'lodash/extend';
 import errorHandler from '../helpers/dbErrorHandler';
 import { useReducer } from 'react';
@@ -7,7 +8,16 @@ import { useReducer } from 'react';
 const listImages = async (req,res) => {
     try {
         let images = await Image.find().select('image_url image_title uploader uploaded');
-        res.json(images);
+
+        console.log(images);
+
+        let imagesName = images;
+        for (let i = 0; i < imagesName.length; i++) {
+            let userName = await User.findById(images[i].uploader);
+            imagesName[i].uploader = userName.name;
+        }
+        
+        res.json(imagesName);
     } catch(err) {
         return res.status(400).json({
             error: errorHandler.getErrorMessage(err)
@@ -56,6 +66,8 @@ const createComment = async (req,res) => {
         });
     }
 }
+
+
 
 export default {
     createImage,
