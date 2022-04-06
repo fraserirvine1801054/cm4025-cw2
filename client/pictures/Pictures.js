@@ -56,9 +56,6 @@ export default function Pictures() {
         const abortController = new AbortController();
         const signal = abortController.signal;
 
-        let imageData;
-        let formattedData = [];
-
         listImg(signal).then((data) => {
             console.log(data);
             if (data && data.error) {
@@ -76,7 +73,7 @@ export default function Pictures() {
     function getName(id) {
         const abortController = new AbortController();
         const signal = abortController.signal;
-    
+
         getUserName(id, signal).then((data) => {
             console.log(data);
             if (data && data.error) {
@@ -138,6 +135,7 @@ export default function Pictures() {
                                 label='Image URL'
                                 value={values.img_url}
                                 onChange={handleChange('img_url')}
+                                fullWidth={true}
                             /> <br />
                         </CardContent>
                         <CardActions>
@@ -152,51 +150,32 @@ export default function Pictures() {
                     </Card>
                 </span>)
             }
-
-            {images.map((item, i) => {
-                return (
-                    <Card key={i}>
-                        <CardHeader
-                            avatar={
-                                <Avatar />
-                            }
-                            title={item.uploader}
-                            subheader={item.uploaded}
-                        />
-                        <CardContent>
-                            <Typography>
-                                {item.image_title}
-                            </Typography>
-                        </CardContent>
-                        <div>
-                            <img 
-                                src={item.image_url}
-                                alt="new"
+                {images.map((item, i) => {
+                    return (
+                        <Card key={i}>
+                            <CardHeader
+                                avatar={
+                                    <Avatar />
+                                }
+                                title={item.uploader}
+                                subheader={`uploaded: ${item.uploaded}`}
                             />
-                        </div>
-                    </Card>
-                )
-            })
-            }
-
+                            <CardContent>
+                                <Typography variant='h5'>
+                                    {item.image_title}
+                                </Typography>
+                            </CardContent>
+                            <div>
+                                <img
+                                    src={item.image_url}
+                                    alt="alt"
+                                    height="400"
+                                />
+                            </div>
+                        </Card>
+                    )
+                })
+                }
         </Paper >
     );
-}
-
-function getName(id) {
-    const abortController = new AbortController();
-    const signal = abortController.signal;
-
-    let currentName = '';
-
-    getUserName(id, signal).then((data) => {
-        console.log(data);
-        if (data && data.error) {
-            console.log(data.error);
-        } else {
-            currentName = data.name;
-        }
-    });
-
-    return currentName;
 }
