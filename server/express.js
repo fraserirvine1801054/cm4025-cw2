@@ -8,6 +8,7 @@ import helmet from 'helmet';
 import Template from './../template';
 import userRoutes from './routes/user.routes';
 import authRoutes from './routes/auth.routes';
+import imgRoutes from './routes/image.routes';
 import devBundle from './devBundle';
 //modules for server side rendering
 import React from 'react';
@@ -44,6 +45,7 @@ app.use(cors());
 
 app.use('/', userRoutes);
 app.use('/', authRoutes);
+app.use('/', imgRoutes);
 
 app.get('*', (req,res) => {
     const sheets = new ServerStyleSheets();

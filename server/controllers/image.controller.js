@@ -16,7 +16,8 @@ const listImages = async (req,res) => {
 }
 
 const createImage = async (req,res) => {
-    const image = Image(req.body);
+    console.log(req.body);
+    const image = new Image(req.body);
     try {
         await image.save();
         return res.status(200).json({
@@ -56,7 +57,7 @@ const createComment = async (req,res) => {
     }
 }
 
-export {
+export default {
     createImage,
     listImages,
     createComment,

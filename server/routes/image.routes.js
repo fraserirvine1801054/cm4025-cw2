@@ -1,7 +1,6 @@
 import express from 'express';
 import imgCtrl from '../controllers/image.controller';
 
-
 const router = express.Router();
 
 router.route('/api/pictures/images')
@@ -11,3 +10,5 @@ router.route('/api/pictures/images')
 router.route('/api/pictures/comments/:img_id')
     .get(imgCtrl.listComments)
     .post(imgCtrl.createComment);
+
+export default router;

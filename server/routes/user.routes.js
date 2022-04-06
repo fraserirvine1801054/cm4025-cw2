@@ -1,6 +1,8 @@
 import express from 'express';
 import userCtrl from '../controllers/user.controller';
 import authCtrl from '../controllers/auth.controller';
+
+import imgCtrl from '../controllers/image.controller';
 import { useResolvedPath } from 'react-router';
 
 const router = express.Router();

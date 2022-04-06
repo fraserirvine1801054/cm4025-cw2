@@ -1,5 +1,6 @@
 //upload images
 const createImg = async (picture) => {
+    console.log(picture);
     try {
         let response = await fetch('/api/pictures/images/', {
             method: 'POST',
