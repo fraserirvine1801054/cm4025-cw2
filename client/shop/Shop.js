@@ -1,11 +1,18 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles'
 import theme from '../theme';
 import auth from './../auth/auth-helper';
+import { listShopItems } from './api-shop';
 
 import {
     Paper,
-    Typography
+    Typography,
+    Grid,
+    Card,
+    CardHeader,
+    CardMedia,
+    CardContent,
+    Box
 } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
@@ -25,18 +32,51 @@ export default function Shop() {
     const [shopItems, setShopItems] = useState([]);
 
     useEffect(() => {
+        console.log("useEffect called from Shop.js");
+        const abortController = new AbortController();
+        const signal = abortController.signal;
 
-    });
+        listShopItems(signal).then((data) => {
+            console.log(data);
+            if (data && data.error) {
+                console.log(data.error);
+            } else {
+                setShopItems(data);
+            }
+        });
+        return () => {
+            abortController.abort();
+        }
+    }, []);
 
-    return(
+    return (
         <Paper className={classes.root} elevation={4}>
             <Typography variant='h6' className={classes.title}>
-                Test shop
+                Shop
             </Typography>
 
-            {
-                auth.isAuthenticated()
-            }
+            <Grid container>
+                {shopItems.map((item, i) => {
+                    <Grid item key={i}>
+                        <Card>
+                            <CardHeader
+                                title={item.item_name}
+                            />
+                            <CardMedia
+                                image={item.item_picture}
+                            />
+                            <CardContent>
+                                <Typography>
+                                    Price: {item.item_price}
+                                </Typography>
+                                <Typography>
+                                    <p>{item.item_description}</p>
+                                </Typography>
+                            </CardContent>
+                        </Card>
+                    </Grid>
+                })}
+            </Grid>
 
         </Paper>
     )
