@@ -10,6 +10,7 @@ import PrivateRoute from './auth/PrivateRoute';
 import Profile from './user/Profile';
 import EditProfile from './user/EditProfile';
 import Pictures from './pictures/Pictures';
+import Shop from './shop/Shop';
 
 const MainRouter = () => {
     return(
@@ -20,6 +21,7 @@ const MainRouter = () => {
                 <Route path="/users" component={Users}/>
                 <Route path="/useradmin/:userId" component={UserAdmin}/>
                 <Route path="/pictures" component={Pictures} />
+                <Route path="/shop" component={Shop} />
                 <Route path="/signup" component={Signup}/>
                 <Route path="/signin" component={Signin}/>
                 <PrivateRoute path="/user/edit/:userId" component={EditProfile}/>
