@@ -9,6 +9,7 @@ import Template from './../template';
 import userRoutes from './routes/user.routes';
 import authRoutes from './routes/auth.routes';
 import imgRoutes from './routes/image.routes';
+import shopRoutes from './routes/shop.routes';
 import devBundle from './devBundle';
 import directives from './express-csp';
 //modules for server side rendering
@@ -60,6 +61,7 @@ app.use(cors());
 app.use('/', userRoutes);
 app.use('/', authRoutes);
 app.use('/', imgRoutes);
+app.use('/', shopRoutes);
 
 app.get('*', (req,res) => {
     const sheets = new ServerStyleSheets();

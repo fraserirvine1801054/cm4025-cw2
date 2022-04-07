@@ -10,7 +10,12 @@ const list = async (req,res) => {
 
 }
 
+const edit = async (req,res) => {
+
+}
+
 export default {
     create,
-    list
+    list,
+    edit
 }

@@ -25,7 +25,7 @@ export default function Shop() {
     const [shopItems, setShopItems] = useState([]);
 
     useEffect(() => {
-        
+
     });
 
     return(
@@ -33,6 +33,11 @@ export default function Shop() {
             <Typography variant='h6' className={classes.title}>
                 Test shop
             </Typography>
+
+            {
+                auth.isAuthenticated()
+            }
+
         </Paper>
     )
 
