@@ -23,6 +23,9 @@ const useStyles = makeStyles(theme => ({
     title: {
         margin: `${theme.spacing(4)}px 0 ${theme.spacing(2)}px`,
         color: theme.palette.openTitle
+    },
+    Media: {
+        width: 250
     }
 }));
 
@@ -57,24 +60,28 @@ export default function Shop() {
 
             <Grid container>
                 {shopItems.map((item, i) => {
-                    <Grid item key={i}>
-                        <Card>
-                            <CardHeader
-                                title={item.item_name}
-                            />
-                            <CardMedia
-                                image={item.item_picture}
-                            />
-                            <CardContent>
-                                <Typography>
-                                    Price: {item.item_price}
-                                </Typography>
-                                <Typography>
-                                    <p>{item.item_description}</p>
-                                </Typography>
-                            </CardContent>
-                        </Card>
-                    </Grid>
+                    return (
+                        <Grid item key={i}>
+                            <Card>
+                                <CardHeader
+                                    title={item.item_name}
+                                />
+                                <CardMedia
+                                    className={classes.Media}
+                                    component="img"
+                                    src={item.item_picture}
+                                />
+                                <CardContent>
+                                    <Typography>
+                                        Price: {item.item_price}
+                                    </Typography>
+                                    <Typography>
+                                        <p>{item.item_description}</p>
+                                    </Typography>
+                                </CardContent>
+                            </Card>
+                        </Grid>
+                    )
                 })}
             </Grid>
 
