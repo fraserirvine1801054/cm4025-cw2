@@ -70,20 +70,6 @@ export default function Pictures() {
         }
     }, []);
 
-    function getName(id) {
-        const abortController = new AbortController();
-        const signal = abortController.signal;
-
-        getUserName(id, signal).then((data) => {
-            console.log(data);
-            if (data && data.error) {
-                console.log(data.error);
-            } else {
-                return data.name;
-            }
-        });
-    }
-
     const handleChange = name => event => {
         setValues({ ...values, [name]: event.target.value })
     }
@@ -171,6 +157,12 @@ export default function Pictures() {
                                     alt="alt"
                                     height="400"
                                 />
+                            </div>
+                            <div>
+                            <ImageComments
+                                key={i}
+                                image_id={item._id}
+                            />
                             </div>
                         </Card>
                     )

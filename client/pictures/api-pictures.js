@@ -29,9 +29,9 @@ const listImg = async (signal) => {
 }
 //upload comments
 
-const createCom = async (comment) => {
+const createCom = async (comment,params) => {
     try {
-        let response = await fetch('/api/pictures/comments/', {
+        let response = await fetch('/api/pictures/comments/' + params, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -39,6 +39,7 @@ const createCom = async (comment) => {
             },
             body: JSON.stringify(comment)
         });
+        return await response.json();
     } catch(err) {
         console.log(err);
     }
@@ -46,7 +47,8 @@ const createCom = async (comment) => {
 
 const listCom = async (signal,params) => {
     try {
-        let response = await fetch('/api/pictures/comments/' + params.img_id, {
+        console.log("listcom test");
+        let response = await fetch('/api/pictures/comments/' + params, {
             method: 'GET',
             signal: signal,
         });

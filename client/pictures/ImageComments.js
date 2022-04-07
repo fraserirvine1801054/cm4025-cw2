@@ -14,7 +14,10 @@ import {
     Typography,
     CardContent,
     CardActions,
-    Avatar
+    CardHeader,
+    Avatar,
+    TextField,
+    Button
 } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
@@ -29,12 +32,9 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function ImageComments(props) {
-
     const classes = useStyles();
-    const [comments, setComments] = useState({
-        img_id: '',
-        commenter_id: '',
-        post_date: '',
+    const [comments, setComments] = useState([]);
+    const [values, setValues] = useState({
         comment_text: ''
     });
 
@@ -42,10 +42,11 @@ export default function ImageComments(props) {
         const abortController = new AbortController();
         const signal = abortController.signal;
 
-        listCom(signal).then((data) => {
+        listCom(signal, props.image_id).then((data) => {
             if (data && data.error) {
                 console.log(data.error);
             } else {
+                console.log(data);
                 setComments(data);
             }
         });
@@ -54,59 +55,74 @@ export default function ImageComments(props) {
         }
     }, []);
 
+    const handleChange = name => event => {
+        setValues({ ...values, [name]: event.target.value });
+    }
+
     const clickSubmit = () => {
         const comment = {
-            img_id: props.imgId || 'err',
-            commenter_id: props.userId || 'err',
-            post_date: '',
-            comment_text: ''
+            img_id: props.image_id || 'err',
+            commenter_id: auth.isAuthenticated().user._id || 'err',
+            post_date: Date.now(),
+            comment_text: values.comment_text
         }
-        createCom(comment).then((data) => {
+        createCom(comment, props.image_id).then((data) => {
             if (data.error) {
-                setComments({ ...comments, error: data.error });
+                setValues({ ...values, error: data.error });
             } else {
-                setComments({ ...comments, error: '', open: true });
+                setValues({ ...values, error: '', open: true });
             }
         });
     }
 
     return (
-        <Box>
+        <Box className={classes.root}>
             {
                 !auth.isAuthenticated() && (<span>
                     <Typography>
-                        Sign in to comment on pictures
+                        Sign in to make comments
                     </Typography>
                 </span>)
             }
             {
                 auth.isAuthenticated() && (<span>
-                    <Card>
-                        <CardContent>
-                            <TextField id='comment' label="Comment" className={classes.TextField} value={values.comment} onChange={handleChange('comment')} margin='normal' />
-                        </CardContent>
-                        <CardActions>
-                            <Button color='primary' variant='contained' onClick={clickSubmit} className={classes.submit}>Comment</Button>
-                        </CardActions>
-                    </Card>
+                    <Typography>
+                        Comment
+                    </Typography>
+                    <TextField
+                        id='comment_text'
+                        label='Comment'
+                        value={values.comment_text}
+                        onChange={handleChange('comment_text')}
+                    />
+                    <Button
+                        color="primary"
+                        variant="contained"
+                        onclick={clickSubmit}
+                    >
+                        Submit
+                    </Button>
                 </span>)
             }
-            <hr />
-            <List dense>
-                {comments.map((item, i) => {
-                    <Box>
-                        <ListItemAvatar>
-                            <Avatar>
-                                <Person />
-                            </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText primary={getUserName(item.userId)} />
-                        <ListItemText primary={item.comment_text} />
-                    </Box>
-                })}
-            </List>
+            {comments.map((item,i) => {
+                return(
+                    <Card key={i}>
+                        <CardHeader
+                            avatar={
+                                <Avatar/>
+                            }
+                            title={item.commenter_id}
+                            subheader={`uploaded: ${item.post_date}`}
+                        />
+                        <Typography>
+                            <p>{item.comment_text}</p>
+                        </Typography>
+                    </Card>
+                )
+            })}
+
         </Box>
-    )
+    );
 
 }
 /*
