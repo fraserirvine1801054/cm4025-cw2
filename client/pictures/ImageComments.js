@@ -18,7 +18,8 @@ import {
     Card,
     Avatar,
     TextField,
-    Button
+    Button,
+    Grid
 } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
@@ -78,7 +79,9 @@ export default function ImageComments(props) {
     }
 
     return (
-        <Box className={classes.root}>
+        <Box
+            paddingLeft={1}
+        >
             {
                 !auth.isAuthenticated() && (<span>
                     <Typography>
@@ -88,41 +91,53 @@ export default function ImageComments(props) {
             }
             {
                 auth.isAuthenticated() && (<span>
-                    <Typography>
-                        Comment
-                    </Typography>
-                    <TextField
-                        id='comment_text'
-                        label='Comment'
-                        value={values.comment_text}
-                        onChange={handleChange('comment_text')}
-                    />
-                    <Button
-                        color="primary"
-                        variant="contained"
-                        onClick={clickSubmit}
-                    >
-                        Submit
-                    </Button>
+                    <Box paddingBottom={2}>
+                        <Typography>
+                            <u>Comments</u>
+                        </Typography>
+                        <TextField
+                            id='comment_text'
+                            label='Comment'
+                            value={values.comment_text}
+                            onChange={handleChange('comment_text')}
+                        />
+                        <Button
+                            color="primary"
+                            variant="contained"
+                            onClick={clickSubmit}
+                        >
+                            Submit
+                        </Button>
+                    </Box>
                 </span>)
             }
-            {comments.map((item,i) => {
-                return(
-                    <Card key={i}>
-                        <CardHeader
-                            avatar={
-                                <Avatar/>
-                            }
-                            title={item.commenter_id}
-                            subheader={`uploaded: ${item.post_date}`}
-                        />
-                        <Typography>
-                            <p>{item.comment_text}</p>
-                        </Typography>
-                    </Card>
-                )
-            })}
+            <Grid
+                container
+                direction="column"
+                spacing={1}
+            >
+                {comments.map((item, i) => {
+                    return (
+                        <Grid item>
+                            <Card key={i} elevation={3}>
+                                <CardHeader
+                                    avatar={
+                                        <Avatar />
+                                    }
+                                    title={item.commenter_id}
+                                    subheader={`uploaded: ${item.post_date}`}
+                                />
+                                <Box paddingLeft={2}>
+                                    <Typography>
+                                        <p>{item.comment_text}</p>
+                                    </Typography>
+                                </Box>
 
+                            </Card>
+                        </Grid>
+                    )
+                })}
+            </Grid>
         </Box>
     );
 

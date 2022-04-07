@@ -26,7 +26,8 @@ import {
     ListItemAvatar,
     Grid,
     GridList,
-    CardMedia
+    CardMedia,
+    Box
 } from '@material-ui/core';
 
 import ArrowForward from '@material-ui/icons/ArrowForward';
@@ -136,38 +137,52 @@ export default function Pictures() {
                     </Card>
                 </span>)
             }
+            <Grid
+                container
+                direction="column"
+                spacing={2}
+            >
                 {images.map((item, i) => {
                     return (
-                        <Card key={i}>
-                            <CardHeader
-                                avatar={
-                                    <Avatar />
-                                }
-                                title={item.uploader}
-                                subheader={`uploaded: ${item.uploaded}`}
-                            />
-                            <CardContent>
-                                <Typography variant='h5'>
-                                    {item.image_title}
-                                </Typography>
-                            </CardContent>
-                            <div>
-                                <img
-                                    src={item.image_url}
-                                    alt="alt"
-                                    height="400"
-                                />
-                            </div>
-                            <div>
-                            <ImageComments
+                        <Grid item>
+
+                            <Card
                                 key={i}
-                                image_id={item._id}
-                            />
-                            </div>
-                        </Card>
+                                elevation={4}
+                            >
+                                <CardHeader
+                                    avatar={
+                                        <Avatar />
+                                    }
+                                    title={item.uploader}
+                                    subheader={`uploaded: ${item.uploaded}`}
+                                />
+                                <CardContent>
+                                    <Typography variant='h5'>
+                                        {item.image_title}
+                                    </Typography>
+                                </CardContent>
+                                <div>
+                                    <Box paddingLeft={2}>
+                                    <img
+                                        src={item.image_url}
+                                        alt="alt"
+                                        height="400"
+                                    />
+                                    </Box>
+                                </div>
+                                <div>
+                                    <ImageComments
+                                        key={i}
+                                        image_id={item._id}
+                                    />
+                                </div>
+                            </Card>
+                        </Grid>
                     )
                 })
                 }
+            </Grid>
         </Paper >
     );
 }
