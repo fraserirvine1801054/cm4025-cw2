@@ -31,7 +31,7 @@ const listImg = async (signal) => {
 
 const createCom = async (comment,params) => {
     try {
-        let response = await fetch('/api/pictures/comments/' + params, {
+        let response = await fetch('/api/pictures/comments/', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',

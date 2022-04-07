@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { listCom, createCom, getComName } from './api-pictures';
+import { listCom, createCom } from './api-pictures';
 import auth from './../auth/auth-helper';
 
 import {
@@ -15,6 +15,7 @@ import {
     CardContent,
     CardActions,
     CardHeader,
+    Card,
     Avatar,
     TextField,
     Button
@@ -50,7 +51,7 @@ export default function ImageComments(props) {
                 setComments(data);
             }
         });
-        return function cleanup() {
+        return () => {
             abortController.abort();
         }
     }, []);
@@ -66,7 +67,8 @@ export default function ImageComments(props) {
             post_date: Date.now(),
             comment_text: values.comment_text
         }
-        createCom(comment, props.image_id).then((data) => {
+        console.log(comment);
+        createCom(comment).then((data) => {
             if (data.error) {
                 setValues({ ...values, error: data.error });
             } else {
@@ -98,7 +100,7 @@ export default function ImageComments(props) {
                     <Button
                         color="primary"
                         variant="contained"
-                        onclick={clickSubmit}
+                        onClick={clickSubmit}
                     >
                         Submit
                     </Button>
@@ -125,17 +127,3 @@ export default function ImageComments(props) {
     );
 
 }
-/*
-async function getUserName(userId) {
-    const abortController = new AbortController();
-    const signal = abortController.signal;
-
-    getComName(signal,userId).then((data) => {
-        if (data && data.error) {
-            console.log(data.error);
-        } else {
-            return data;
-        }
-    });
-}
-*/

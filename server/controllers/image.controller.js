@@ -46,6 +46,15 @@ const listComments = async (req,res) => {
         let img_id = req.params.img_id;
         console.log(`listcomments: ${img_id}`);
         let comments = await Comment.find({img_id : img_id}).select('img_id commenter_id post_date comment_text')
+        
+        console.log(comments);
+
+        let commentsName = comments;
+        for (let i = 0; i < commentsName.length; i++) {
+            let userName = await User.findById(comments[i].commenter_id);
+            commentsName[i].commenter_id = userName.name;
+        }
+
         res.json(comments);
     } catch(err) {
         return res.status(400).json({
@@ -55,6 +64,7 @@ const listComments = async (req,res) => {
 }
 
 const createComment = async (req,res) => {
+    console.log("create comment call");
     const comment = new Comment(req.body);
     try {
         await comment.save();
