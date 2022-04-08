@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import theme from '../theme';
 import auth from './../auth/auth-helper';
 import { listShopItems } from './api-shop';
+import { checkAdmin } from '../user/api-user';
 
 import {
     Paper,
@@ -49,6 +50,8 @@ export default function Shop() {
         quantity: 0
     });
     let [basketTotalPrice, setBasketTotalPrice] = useState(0.0);
+    let [isAdmin, setIsAdmin] = useState({});
+
 
     //currency formatter
     let currencyFormatter = new Intl.NumberFormat('en-GB', {
@@ -61,11 +64,26 @@ export default function Shop() {
         const abortController = new AbortController();
         const signal = abortController.signal;
 
+        if (auth.isAuthenticated()) {
+            checkAdmin(auth.isAuthenticated().user._id, signal).then((data) => {
+                console.log(data);
+                if (data && data.error) {
+                    console.log(data.error);
+                } else {
+                    console.log(data);
+                    setIsAdmin(data);
+                }
+            });
+        } else {
+            setIsAdmin({admin: false});
+        }
+
         listShopItems(signal).then((data) => {
             console.log(data);
             if (data && data.error) {
                 console.log(data.error);
             } else {
+                console.log(data);
                 setShopItems(data);
             }
         });
@@ -91,7 +109,7 @@ export default function Shop() {
             item_total_price: totalItemPrice,
             quantity: basketValues.quantity
         }
-        
+
         console.log(basketItem);
         setBasketTotalPrice(basketTotalPrice + totalItemPrice);
         setBasketItems(basketItems => [...basketItems, basketItem]);
@@ -100,8 +118,8 @@ export default function Shop() {
     //remove item from basket
     const removeItem = (itemIndex) => {
         let thisBasketItems = basketItems;
-        thisBasketItems.splice(itemIndex,1);
-    
+        thisBasketItems.splice(itemIndex, 1);
+
         let newTotalPrice = 0.0;
         thisBasketItems.forEach(element => {
             newTotalPrice += element.item_total_price;
@@ -148,7 +166,7 @@ export default function Shop() {
                                                     <Button
                                                         color="primary"
                                                         size="small"
-                                                        onClick={() => {removeItem(i)}}
+                                                        onClick={() => { removeItem(i) }}
                                                     >
                                                         Remove
                                                     </Button>
@@ -208,8 +226,18 @@ export default function Shop() {
                                     >
                                         Add to Cart
                                     </Button>
-                                    {console.log(basketItems)}
+                                    {
+                                        isAdmin.admin && (<span>
+                                            <br />
+                                            <Button
+                                                color="primary"
+                                            >
+                                                Admin: edit item
+                                            </Button>
+                                        </span>)
+                                    }
                                 </CardContent>
+                                {console.log(isAdmin)}
                             </Card>
                         </Grid>
                     )

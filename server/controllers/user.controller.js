@@ -112,6 +112,22 @@ const getName = async (req,res) => {
     }
 }
 
+const checkAdmin = async (req,res) => {
+    try {
+        let user = await User.findById(req.params.userId);
+        if (!user) {
+            return res.status('400').json({
+                error: "user not found"
+            });
+        }
+        res.json({admin: user.admin})
+    } catch(err) {
+        return res.status('400').json({
+            error: "Could not retrieve user"
+        });
+    }
+}
+
 export default {
     create,
     userByID,
@@ -120,5 +136,6 @@ export default {
     listadmin,
     remove,
     update,
-    getName
+    getName,
+    checkAdmin
 }

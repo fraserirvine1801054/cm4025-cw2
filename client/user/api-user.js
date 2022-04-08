@@ -106,6 +106,18 @@ const getUserName = async (params,signal) => {
     }
 }
 
+const checkAdmin = async (params, signal) => {
+    try {
+        let response = await fetch('/api/users/checkadmin/'+ params, {
+            method: 'GET',
+            signal: signal,
+        });
+        return await response.json();
+    } catch(err) {
+        console.log(err);
+    }
+}
+
 export {
     create,
     list,
@@ -113,5 +125,6 @@ export {
     read,
     update,
     remove,
-    getUserName
+    getUserName,
+    checkAdmin
 }

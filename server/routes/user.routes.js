@@ -24,4 +24,7 @@ router.param('userId', userCtrl.userByID);
 router.route('/api/users/name/:userId')
     .get(userCtrl.getName);
 
+router.route('/api/users/checkadmin/:userId')
+    .get(userCtrl.checkAdmin);
+
 export default router;
