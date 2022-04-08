@@ -32,10 +32,12 @@ export default function ShopAdminAdd() {
         item_price: 0.0,
         item_stock: 0,
         item_description: '',
-        item_picture: ''
+        item_picture: '',
+        jwt: ''
     });
     const jwt = auth.isAuthenticated();
 
+    console.log(jwt);
 
     useEffect(() => {
         const abortController = new AbortController();
@@ -64,14 +66,14 @@ export default function ShopAdminAdd() {
 
     const clickSubmit = () => {
         const shopItem = {
-            item_name: values.item_id,
+            item_name: values.item_name,
             item_price: parseFloat(values.item_price),
             item_stock: parseInt(values.item_stock),
-            item_description: values.item_description,
-            item_picture: values.item_picture
+            item_picture: values.item_picture,
+            item_description: values.item_description
         }
         console.log(shopItem);
-        createShopItem(shopItem, jwt).then((data) => {
+        createShopItem(jwt.token, shopItem).then((data) => {
             if (data.error) {
                 setValues({ ...values, error: data.error});
             } else {

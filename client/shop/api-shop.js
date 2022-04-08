@@ -1,13 +1,13 @@
 //api-shop
-const createShopItem = async (item, credentials) => {
+const createShopItem = async (credentials, item) => {
     console.log("creating shop item by admin");
     try {
-        let response = await fetch('/api/shop/admin' + params, {
+        let response = await fetch('/api/shop/admin/', {
             method: 'POST',
             headers: {
-                'Accept': 'Appllication/json',
+                'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + credentials.t
+                'Authorization': 'Bearer ' + credentials
             },
             body: JSON.stringify(item)
         });
