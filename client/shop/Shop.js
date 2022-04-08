@@ -91,13 +91,13 @@ export default function Shop() {
     }
 
     //remove item from basket
-    const removeItem = () => {
-
+    const removeItem = (itemIndex) => {
+        let thisBasketItems = basketItems;
+        thisBasketItems.splice(itemIndex,1);
+        setBasketItems([...thisBasketItems]);
     }
 
     console.log("return call");
-
-
 
     return (
         <Paper className={classes.root} elevation={4}>
@@ -128,7 +128,15 @@ export default function Shop() {
                                                 <TableCell>{item.item_name}</TableCell>
                                                 <TableCell>{item.item_price}</TableCell>
                                                 <TableCell>{item.quantity}</TableCell>
-                                                <TableCell></TableCell>
+                                                <TableCell>
+                                                    <Button
+                                                        color="primary"
+                                                        size="small"
+                                                        onClick={() => {removeItem(i)}}
+                                                    >
+                                                        Remove
+                                                    </Button>
+                                                </TableCell>
                                             </TableRow>
                                         ))}
                                     </TableBody>
