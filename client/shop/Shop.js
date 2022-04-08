@@ -38,6 +38,7 @@ export default function Shop() {
     let [basketItems, setBasketItems] = useState([]);
     const [basketValues, setBasketValues] = useState({
         item_id: '',
+        item_name: '',
         quantity: 0
     });
 
@@ -60,24 +61,37 @@ export default function Shop() {
     }, []);
 
     const handleChange = name => event => {
-        setBasketValues({ ...basketValues, [name]: event.target.value});
+        setBasketValues({ ...basketValues, [name]: event.target.value });
     }
 
     //submit for adding to basket
-    const clickSubmit = (itemId) => {
+    const clickSubmit = (itemId, itemName) => {
         const basketItem = {
             item_id: itemId,
+            item_name: itemName,
             quantity: basketValues.quantity
         }
+        
         console.log(basketItem);
         setBasketItems(basketItems => [...basketItems, basketItem]);
     }
-
+    console.log("return call");
     return (
         <Paper className={classes.root} elevation={4}>
             <Typography variant='h6' className={classes.title}>
                 Shop
             </Typography>
+
+            {
+                basketItems.length > 0 && (<span>
+                    <Box>
+                        <Typography>
+                            test basket
+                        </Typography>
+                    </Box>
+                </span>)
+            }
+
 
             <Grid container>
                 {shopItems.map((item, i) => {
@@ -111,7 +125,7 @@ export default function Shop() {
                                     <Button
                                         color="primary"
                                         variant="contained"
-                                        onClick={() => {clickSubmit(item._id)}}
+                                        onClick={() => { clickSubmit(item._id, item.item_name) }}
                                     >
                                         Add to Cart
                                     </Button>
@@ -122,7 +136,6 @@ export default function Shop() {
                     )
                 })}
             </Grid>
-
         </Paper>
     )
 
