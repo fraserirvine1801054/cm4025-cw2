@@ -10,10 +10,21 @@ import {
 
 export default function ShopAdminEdit() {
 
+    useEffect(() => {
+        const abortController = new AbortController();
+        const signal = abortController.signal;
+
+        return () => {
+            abortController.abort();
+        }
+    }, []);
+
+
     return(
         <Paper>
             <Typography>
-                
+                edit test
+                {console.log(auth.isAuthenticated())}
             </Typography>
         </Paper>
     )

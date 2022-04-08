@@ -4,6 +4,7 @@ import theme from '../theme';
 import auth from './../auth/auth-helper';
 import { listShopItems } from './api-shop';
 import { checkAdmin } from '../user/api-user';
+import { Link } from 'react-router-dom';
 
 import {
     Paper,
@@ -21,7 +22,7 @@ import {
     TableCell,
     TableContainer,
     TableHead,
-    TableRow
+    TableRow,
 } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
@@ -75,7 +76,7 @@ export default function Shop() {
                 }
             });
         } else {
-            setIsAdmin({admin: false});
+            setIsAdmin({ admin: false });
         }
 
         listShopItems(signal).then((data) => {
@@ -136,6 +137,17 @@ export default function Shop() {
             <Typography variant='h6' className={classes.title}>
                 Shop
             </Typography>
+            {
+                isAdmin.admin && (<span>
+                    <Link to="/shopadmin/add">
+                        <Button
+                            color="primary"
+                        >
+                            Admin: add item
+                        </Button>
+                    </Link>
+                </span>)
+            }
 
             {
                 basketItems.length > 0 && (<span>
@@ -187,11 +199,14 @@ export default function Shop() {
                 </span>)
             }
 
-            <Grid container>
+            <Grid 
+                container
+                spacing={2}
+            >
                 {shopItems.map((item, i) => {
                     return (
-                        <Grid item key={i}>
-                            <Card>
+                        <Grid item>
+                            <Card key={i}>
                                 <CardHeader
                                     title={item.item_name}
                                 />
@@ -219,6 +234,7 @@ export default function Shop() {
                                         onChange={handleChange('quantity')}
                                         helperText="quantity must be 1 or greater"
                                     />
+                                    <br />
                                     <Button
                                         color="primary"
                                         variant="contained"
@@ -229,11 +245,13 @@ export default function Shop() {
                                     {
                                         isAdmin.admin && (<span>
                                             <br />
-                                            <Button
-                                                color="primary"
-                                            >
-                                                Admin: edit item
-                                            </Button>
+                                            <Link to={`/shopadmin/edit/${item._id}`}>
+                                                <Button
+                                                    color="primary"
+                                                >
+                                                    Admin: edit item
+                                                </Button>
+                                            </Link>
                                         </span>)
                                     }
                                 </CardContent>
