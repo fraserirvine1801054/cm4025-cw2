@@ -16,4 +16,8 @@ router.route('/api/shop/admin/:userId')
 router.route('/api/shop/items')
     .get(shopCtrl.list);
 
+//get single item
+router.route('/api/shop/singleitem/:itemId')
+    .get(shopCtrl.getSingleItem);
+
 export default router;

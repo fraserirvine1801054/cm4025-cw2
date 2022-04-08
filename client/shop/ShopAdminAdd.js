@@ -32,8 +32,7 @@ export default function ShopAdminAdd() {
         item_price: 0.0,
         item_stock: 0,
         item_description: '',
-        item_picture: '',
-        jwt: ''
+        item_picture: ''
     });
     const jwt = auth.isAuthenticated();
 

@@ -29,7 +29,20 @@ const listShopItems = async (signal) => {
     }
 }
 
+const getSingleItem = async (signal, params) => {
+    try {
+        let response = await fetch('/api/shop/singleitem/' + params, {
+            method: 'GET',
+            signal: signal,
+        });
+        return await response.json();
+    } catch (err) {
+        console.log(err);
+    }
+}
+
 export {
     createShopItem,
-    listShopItems
+    listShopItems,
+    getSingleItem
 }

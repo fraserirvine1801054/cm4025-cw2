@@ -62,8 +62,20 @@ const edit = async (req, res) => {
 
 }
 
+const getSingleItem = async (req,res) => {
+    try{
+        let item = await ShopItem.findById(req.params.itemId);
+        res.json(item);
+    } catch (err) {
+        return res.status(400).json({
+            error: errorHandler.getErrorMessage(err)
+        });
+    }
+}
+
 export default {
     create,
     list,
-    edit
+    edit,
+    getSingleItem
 }
