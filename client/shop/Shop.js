@@ -14,7 +14,13 @@ import {
     CardContent,
     Box,
     TextField,
-    Button
+    Button,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow
 } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
@@ -39,8 +45,10 @@ export default function Shop() {
     const [basketValues, setBasketValues] = useState({
         item_id: '',
         item_name: '',
+        item_price: 0.0,
         quantity: 0
     });
+    let [basketTotalPrice, setBasketTotalPrice] = useState(0.0);
 
     useEffect(() => {
         console.log("useEffect called from Shop.js");
@@ -55,6 +63,9 @@ export default function Shop() {
                 setShopItems(data);
             }
         });
+
+        console.log("useeffect test");
+
         return () => {
             abortController.abort();
         }
@@ -65,17 +76,29 @@ export default function Shop() {
     }
 
     //submit for adding to basket
-    const clickSubmit = (itemId, itemName) => {
+    const clickSubmit = (itemId, itemName, itemPrice) => {
         const basketItem = {
             item_id: itemId,
             item_name: itemName,
+            item_price: itemPrice,
             quantity: basketValues.quantity
         }
-        
+        let totalItemPrice = itemPrice * basketValues.quantity;
+
         console.log(basketItem);
+        setBasketTotalPrice(basketTotalPrice + totalItemPrice);
         setBasketItems(basketItems => [...basketItems, basketItem]);
     }
+
+    //remove item from basket
+    const removeItem = () => {
+
+    }
+
     console.log("return call");
+
+
+
     return (
         <Paper className={classes.root} elevation={4}>
             <Typography variant='h6' className={classes.title}>
@@ -85,13 +108,42 @@ export default function Shop() {
             {
                 basketItems.length > 0 && (<span>
                     <Box>
-                        <Typography>
-                            test basket
-                        </Typography>
+                        <Card>
+                            <Typography>
+                                test basket
+                            </Typography>
+                            <TableContainer>
+                                <Table>
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell>Item Name</TableCell>
+                                            <TableCell>Price (per item)</TableCell>
+                                            <TableCell>Quantity</TableCell>
+                                            <TableCell>Actions</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {basketItems.map((item, i) => (
+                                            <TableRow key={i}>
+                                                <TableCell>{item.item_name}</TableCell>
+                                                <TableCell>{item.item_price}</TableCell>
+                                                <TableCell>{item.quantity}</TableCell>
+                                                <TableCell></TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                            <Typography>
+                                Total Price: {basketTotalPrice}
+                            </Typography>
+                            <Button color="primary" variant="contained">
+                                Checkout
+                            </Button>
+                        </Card>
                     </Box>
                 </span>)
             }
-
 
             <Grid container>
                 {shopItems.map((item, i) => {
@@ -125,7 +177,7 @@ export default function Shop() {
                                     <Button
                                         color="primary"
                                         variant="contained"
-                                        onClick={() => { clickSubmit(item._id, item.item_name) }}
+                                        onClick={() => { clickSubmit(item._id, item.item_name, item.item_price) }}
                                     >
                                         Add to Cart
                                     </Button>
