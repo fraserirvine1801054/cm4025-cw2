@@ -12,7 +12,9 @@ import {
     CardHeader,
     CardMedia,
     CardContent,
-    Box
+    Box,
+    TextField,
+    Button
 } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
@@ -33,6 +35,11 @@ export default function Shop() {
 
     const classes = useStyles();
     const [shopItems, setShopItems] = useState([]);
+    let [basketItems, setBasketItems] = useState([]);
+    const [basketValues, setBasketValues] = useState({
+        item_id: '',
+        quantity: 0
+    });
 
     useEffect(() => {
         console.log("useEffect called from Shop.js");
@@ -51,6 +58,20 @@ export default function Shop() {
             abortController.abort();
         }
     }, []);
+
+    const handleChange = name => event => {
+        setBasketValues({ ...basketValues, [name]: event.target.value});
+    }
+
+    //submit for adding to basket
+    const clickSubmit = (itemId) => {
+        const basketItem = {
+            item_id: itemId,
+            quantity: basketValues.quantity
+        }
+        console.log(basketItem);
+        setBasketItems(basketItems => [...basketItems, basketItem]);
+    }
 
     return (
         <Paper className={classes.root} elevation={4}>
@@ -78,6 +99,23 @@ export default function Shop() {
                                     <Typography>
                                         <p>{item.item_description}</p>
                                     </Typography>
+                                    <TextField
+                                        id="quantity"
+                                        label="Quantity"
+                                        type="number"
+                                        value={basketValues.quantity}
+                                        defaultValue={1}
+                                        onChange={handleChange('quantity')}
+                                        helperText="quantity must be 1 or greater"
+                                    />
+                                    <Button
+                                        color="primary"
+                                        variant="contained"
+                                        onClick={() => {clickSubmit(item._id)}}
+                                    >
+                                        Add to Cart
+                                    </Button>
+                                    {console.log(basketItems)}
                                 </CardContent>
                             </Card>
                         </Grid>
