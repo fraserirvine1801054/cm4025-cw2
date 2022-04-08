@@ -50,6 +50,12 @@ export default function Shop() {
     });
     let [basketTotalPrice, setBasketTotalPrice] = useState(0.0);
 
+    //currency formatter
+    let currencyFormatter = new Intl.NumberFormat('en-GB', {
+        style: 'currency',
+        currency: 'GBP'
+    });
+
     useEffect(() => {
         console.log("useEffect called from Shop.js");
         const abortController = new AbortController();
@@ -77,14 +83,15 @@ export default function Shop() {
 
     //submit for adding to basket
     const clickSubmit = (itemId, itemName, itemPrice) => {
+        let totalItemPrice = itemPrice * basketValues.quantity;
         const basketItem = {
             item_id: itemId,
             item_name: itemName,
             item_price: itemPrice,
+            item_total_price: totalItemPrice,
             quantity: basketValues.quantity
         }
-        let totalItemPrice = itemPrice * basketValues.quantity;
-
+        
         console.log(basketItem);
         setBasketTotalPrice(basketTotalPrice + totalItemPrice);
         setBasketItems(basketItems => [...basketItems, basketItem]);
@@ -94,6 +101,13 @@ export default function Shop() {
     const removeItem = (itemIndex) => {
         let thisBasketItems = basketItems;
         thisBasketItems.splice(itemIndex,1);
+    
+        let newTotalPrice = 0.0;
+        thisBasketItems.forEach(element => {
+            newTotalPrice += element.item_total_price;
+        });
+
+        setBasketTotalPrice(newTotalPrice);
         setBasketItems([...thisBasketItems]);
     }
 
@@ -109,9 +123,9 @@ export default function Shop() {
                 basketItems.length > 0 && (<span>
                     <Box>
                         <Card>
-                            <Typography>
-                                test basket
-                            </Typography>
+                            <CardHeader
+                                title="Your Basket"
+                            />
                             <TableContainer>
                                 <Table>
                                     <TableHead>
@@ -119,6 +133,7 @@ export default function Shop() {
                                             <TableCell>Item Name</TableCell>
                                             <TableCell>Price (per item)</TableCell>
                                             <TableCell>Quantity</TableCell>
+                                            <TableCell>total price of item</TableCell>
                                             <TableCell>Actions</TableCell>
                                         </TableRow>
                                     </TableHead>
@@ -126,8 +141,9 @@ export default function Shop() {
                                         {basketItems.map((item, i) => (
                                             <TableRow key={i}>
                                                 <TableCell>{item.item_name}</TableCell>
-                                                <TableCell>{item.item_price}</TableCell>
+                                                <TableCell>{currencyFormatter.format(item.item_price)}</TableCell>
                                                 <TableCell>{item.quantity}</TableCell>
+                                                <TableCell>{currencyFormatter.format(item.item_total_price)}</TableCell>
                                                 <TableCell>
                                                     <Button
                                                         color="primary"
@@ -143,7 +159,7 @@ export default function Shop() {
                                 </Table>
                             </TableContainer>
                             <Typography>
-                                Total Price: {basketTotalPrice}
+                                Total Price: {currencyFormatter.format(basketTotalPrice)}
                             </Typography>
                             <Button color="primary" variant="contained">
                                 Checkout
@@ -168,7 +184,10 @@ export default function Shop() {
                                 />
                                 <CardContent>
                                     <Typography>
-                                        Price: {item.item_price}
+                                        Price: {currencyFormatter.format(item.item_price)}
+                                    </Typography>
+                                    <Typography>
+                                        Stock: {item.item_stock}
                                     </Typography>
                                     <Typography>
                                         <p>{item.item_description}</p>
