@@ -14,6 +14,7 @@ import {
     CardHeader,
     CardMedia,
     CardContent,
+    CardActions,
     Box,
     TextField,
     Button,
@@ -36,6 +37,9 @@ const useStyles = makeStyles(theme => ({
     },
     Media: {
         width: 250
+    },
+    Card: {
+        maxWidth: 250
     }
 }));
 
@@ -191,22 +195,27 @@ export default function Shop() {
                             <Typography>
                                 Total Price: {currencyFormatter.format(basketTotalPrice)}
                             </Typography>
-                            <Button color="primary" variant="contained">
-                                Checkout
-                            </Button>
+                            <CardActions>
+                                <Button color="primary" variant="contained">
+                                    Checkout
+                                </Button>
+                            </CardActions>
                         </Card>
                     </Box>
                 </span>)
             }
-
-            <Grid 
+            <br />
+            <Grid
                 container
                 spacing={2}
             >
                 {shopItems.map((item, i) => {
                     return (
                         <Grid item>
-                            <Card key={i}>
+                            <Card
+                                className={classes.Card}
+                                key={i}
+                            >
                                 <CardHeader
                                     title={item.item_name}
                                 />
@@ -222,8 +231,8 @@ export default function Shop() {
                                     <Typography>
                                         Stock: {item.item_stock}
                                     </Typography>
-                                    <Typography>
-                                        <p>{item.item_description}</p>
+                                    <Typography component="p">
+                                        {item.item_description}
                                     </Typography>
                                     <TextField
                                         id="quantity"

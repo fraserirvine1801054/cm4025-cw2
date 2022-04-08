@@ -5,11 +5,11 @@ import authCtrl from '../controllers/auth.controller';
 const router = express.Router();
 
 //admin add items
-router.route('/api/shop/admin')
+router.route('/api/shop/admin/:userId')
     .post(authCtrl.requireSignin,authCtrl.hasAdminAuthorization,shopCtrl.create);
 
 //admin edit item
-router.route('/api/shop/admin')
+router.route('/api/shop/admin/:userId')
     .put(authCtrl.requireSignin,authCtrl.hasAdminAuthorization,shopCtrl.edit);
 
 //list items
