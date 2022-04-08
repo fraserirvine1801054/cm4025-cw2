@@ -36,10 +36,10 @@ const useStyles = makeStyles(theme => ({
         color: theme.palette.openTitle
     },
     Media: {
-        width: 250
+        width: 350
     },
     Card: {
-        maxWidth: 250
+        maxWidth: 350
     }
 }));
 
