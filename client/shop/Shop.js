@@ -36,10 +36,11 @@ const useStyles = makeStyles(theme => ({
         color: theme.palette.openTitle
     },
     Media: {
-        width: 350
+        width: 400,
+        height: 300
     },
     Card: {
-        maxWidth: 350
+        maxWidth: 400
     }
 }));
 
@@ -214,6 +215,7 @@ export default function Shop() {
                         <Grid item>
                             <Card
                                 className={classes.Card}
+                                elevation={4}
                                 key={i}
                             >
                                 <CardHeader
