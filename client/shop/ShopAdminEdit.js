@@ -33,6 +33,7 @@ export default function ShopAdminEdit({ match }) {
     const [values, setValues] = useState({});
 
     useEffect(() => {
+        console.log("shopadminedit useeffect call");
         const abortController = new AbortController();
         const signal = abortController.signal;
 
@@ -45,27 +46,27 @@ export default function ShopAdminEdit({ match }) {
                     console.log(data);
                     setIsAdmin(data);
                 }
-            }).then(() => {
-                if (isAdmin) {
-                    getSingleItem(match.params.itemId, signal).then((data) => {
-                        console.log(data);
-                        if (data && data.error) {
-                            console.log(data);
-                        } else {
-                            console.log(data);
-                            setCurrentItem(data);
-                            setValues({
-                                new_item_id: data.item_id,
-                                new_item_price: data.item_price,
-                                new_item_stock: data.item_stock,
-                                new_item_description: data.item_description,
-                                new_item_picture: data.item_picture
-                            });
-                        }
-                    });
-                }
-            })
+            });
+        } else {
+            setIsAdmin({ admin: false });
         }
+
+        getSingleItem(match.params.itemId, signal).then((data) => {
+            console.log(data);
+            if (data && data.error) {
+                console.log(data);
+            } else {
+                console.log(data);
+                setCurrentItem(data);
+                setValues({
+                    new_item_id: data.item_id,
+                    new_item_price: data.item_price,
+                    new_item_stock: data.item_stock,
+                    new_item_description: data.item_description,
+                    new_item_picture: data.item_picture
+                });
+            }
+        });
 
         return () => {
             abortController.abort();
@@ -73,7 +74,7 @@ export default function ShopAdminEdit({ match }) {
     }, [match.params.itemId]);
 
     const handleChange = name => event => {
-        setValues({ ...values, [name]: event.target.value});
+        setValues({ ...values, [name]: event.target.value });
     }
 
     const clickSubmit = () => {
@@ -83,17 +84,18 @@ export default function ShopAdminEdit({ match }) {
     return (
         <Paper>
             {
-                !isAdmin && (<span>
+                !isAdmin.admin && (<span>
                     <Typography>
                         Access denied
                     </Typography>
                 </span>)
             }
             {
-                isAdmin && (<span>
+                isAdmin.admin && (<span>
                     <Typography>
                         Edit Item
                     </Typography>
+                    {console.log(current)}
                     <Card>
                         <CardMedia
                             component="img"
@@ -116,14 +118,14 @@ export default function ShopAdminEdit({ match }) {
                         <Typography>
                             New Details
                         </Typography>
-                        <br/>
+                        <br />
                         <TextField
                             id="new_item_name"
                             label="New item name"
                             value={values.new_item_name}
                             onChange={handleChange('new_item_name')}
                             fullWidth={true}
-                        /><br/>
+                        /><br />
                         <TextField
                             id="new_item_price"
                             label="New item price"
@@ -131,7 +133,7 @@ export default function ShopAdminEdit({ match }) {
                             value={values.new_item_price}
                             onChange={handleChange('new_item_price')}
                             fullWidth={true}
-                        /><br/>
+                        /><br />
                         <TextField
                             id="new_item_stock"
                             label="New item stock"
@@ -139,21 +141,21 @@ export default function ShopAdminEdit({ match }) {
                             value={values.new_item_stock}
                             onChange={handleChange('new_item_stock')}
                             fullWidth={true}
-                        /><br/>
+                        /><br />
                         <TextField
                             id="new_item_description"
                             label="New item description"
                             value={values.new_item_stock}
                             onChange={handleChange('new_item_description')}
                             fullWidth={true}
-                        /><br/>
+                        /><br />
                         <TextField
                             id="new_item_picture"
                             label="New item picture"
                             values={values.new_item_picture}
                             onChange={handleChange('new_item_picture')}
                             fullWidth={true}
-                        /><br/>
+                        /><br />
                         <Button
                             color="primary"
                             variant="contained"
