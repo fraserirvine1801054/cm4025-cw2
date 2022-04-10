@@ -8,9 +8,10 @@ const router = express.Router();
 router.route('/api/shop/admin')
     .post(shopCtrl.create);
 
-//admin edit item
+//admin edit/delete item
 router.route('/api/shop/admin/:itemId')
-    .put(shopCtrl.edit);
+    .put(shopCtrl.edit)
+    .delete(shopCtrl.deleteItem);
 
 //list items
 router.route('/api/shop/items')

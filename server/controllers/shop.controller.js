@@ -119,9 +119,50 @@ const getSingleItem = async (req, res) => {
     }
 }
 
+const deleteItem = async (req, res) => {
+    const jwtToken = req.cookies.t;
+    console.log(jwtToken);
+
+    let decodedToken;
+
+    try {
+         decodedToken = jwt.verify(jwtToken, config.jwtSecret);
+    } catch (err){
+        console.log(err);
+        return res.status(400).json({
+            error: "cannot verify token"
+        });
+    }
+
+    console.log(decodedToken);
+    let user = await User.findById(decodedToken._id);
+    if (!user) {
+        return res.status(400).json({
+            error: "deleting user not found"
+        });
+    }
+
+    if (user.admin) {
+        const itemId = req.params.itemId;
+
+        try {
+            await ShopItem.deleteOne({_id: itemId});
+        } catch (err) {
+            return res.status(400).json({
+                error: errorHandler.getErrorMessage(err)
+            });
+        }
+    } else {
+        return res.status(400).json({
+            error: "deleting user is not an admin"
+        });
+    }
+}
+
 export default {
     create,
     list,
     edit,
-    getSingleItem
+    getSingleItem,
+    deleteItem
 }

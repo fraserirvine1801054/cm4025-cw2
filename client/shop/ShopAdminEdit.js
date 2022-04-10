@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import theme from '../theme';
 import auth from './../auth/auth-helper';
 import { checkAdmin } from '../user/api-user';
-import { editItem, getSingleItem } from './api-shop';
+import { deleteItem, editItem, getSingleItem } from './api-shop';
 
 import {
     Paper,
@@ -109,6 +109,14 @@ export default function ShopAdminEdit({ match }) {
         });
     }
 
+    const clickDelete = () => {
+        deleteItem(jwt.token, match.params.itemId).then((data) => {
+            if (data.error) {
+                console.log(data.error);
+            }
+        });
+    }
+
     return (
         <Paper className={classes.root} elevation={4}>
             {
@@ -142,6 +150,7 @@ export default function ShopAdminEdit({ match }) {
                             {currentItem.item_description}
                         </Typography>
                     </Card>
+                    <br/>
                     <Card>
                         <Typography>
                             New Details
@@ -190,6 +199,15 @@ export default function ShopAdminEdit({ match }) {
                             onClick={clickSubmit}
                         >
                             Update
+                        </Button>
+                        <br/>
+                        <br/>
+                        <Button
+                            color="primary"
+                            variant="contained"
+                            onClick={clickDelete}
+                        >
+                            Delete item
                         </Button>
                     </Card>
                 </span>)
