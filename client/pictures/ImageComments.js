@@ -140,6 +140,7 @@ export default function ImageComments(props) {
                         />
                         <Button
                             color="primary"
+                            size="small"
                             onClick={clickSubmit}
                         >
                             Submit
@@ -166,7 +167,8 @@ export default function ImageComments(props) {
                                 {
                                     isAdmin.admin && (<span>
                                         <Button
-                                            color="primary"
+                                            color="secondary"
+                                            size="small"
                                             onClick={() => {clickDelete(item._id)}}
                                         >
                                             admin: delete comment
@@ -178,7 +180,8 @@ export default function ImageComments(props) {
                                         {
                                             item.commenter_id === auth.isAuthenticated().user._id && (<span>
                                                 <Button
-                                                    color="primary"
+                                                    color="secondary"
+                                                    size="small"
                                                     onClick={() => {userClickDelete(item._id)}}
                                                 >
                                                     delete comment

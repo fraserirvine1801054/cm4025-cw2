@@ -196,7 +196,8 @@ export default function Pictures() {
                                 {
                                     isAdmin.admin && (<span>
                                         <Button
-                                            color="primary"
+                                            color="secondary"
+                                            size="small"
                                             onClick={() => { clickDelete(item._id) }}
                                         >
                                             admin: delete image
@@ -208,7 +209,8 @@ export default function Pictures() {
                                         {
                                             item.uploader === auth.isAuthenticated().user._id && (<span>
                                                 <Button
-                                                    color="primary"
+                                                    color="secondary"
+                                                    size="small"
                                                     onClick={() => { userClickDelete(item._id) }}
                                                 >
                                                     delete image

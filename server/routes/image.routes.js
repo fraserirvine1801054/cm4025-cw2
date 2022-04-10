@@ -14,8 +14,7 @@ router.route('/api/pictures/comments')
     .post(imgCtrl.createComment);
 
 router.route('/api/pictures/comments/:img_id')
-    .get(imgCtrl.listComments)
-
+    .get(imgCtrl.listComments);
 
 router.route('/api/pictures/comments/:com_id')
     .delete(imgCtrl.userDeleteComment);

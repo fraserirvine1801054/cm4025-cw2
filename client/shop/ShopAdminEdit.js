@@ -203,7 +203,7 @@ export default function ShopAdminEdit({ match }) {
                         <br/>
                         <br/>
                         <Button
-                            color="primary"
+                            color="secondary"
                             variant="contained"
                             onClick={clickDelete}
                         >
