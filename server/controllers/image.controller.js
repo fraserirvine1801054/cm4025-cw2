@@ -64,13 +64,23 @@ const listComments = async (req, res) => {
 
         console.log(comments);
 
-        let commentsName = comments;
-        for (let i = 0; i < commentsName.length; i++) {
-            let userName = await User.findById(comments[i].commenter_id);
-            commentsName[i].commenter_id = userName.name;
-        }
+        let commentsName = [];
 
-        res.json(comments);
+        //let commentsName = comments;
+        for (let i = 0; i < comments.length; i++) {
+            let currentComment = {
+                _id: comments[i]._id,
+                img_id: comments[i].img_id,
+                commenter_id: comments[i].commenter_id,
+                commenter_string: '',
+                post_date: comments[i].post_date,
+                comment_text: comments[i].comment_text
+            }
+            let userName = await User.findById(comments[i].commenter_id);
+            currentComment.commenter_string = userName.name;
+            commentsName.push(currentComment);
+        }
+        res.json(commentsName);
     } catch (err) {
         return res.status(400).json({
             error: errorHandler.getErrorMessage(err)
@@ -215,7 +225,46 @@ const deleteComment = async (req, res) => {
     }
 }
 
+const userDeleteComment = async (req, res) => {
+    console.log("userdeletecomment");
+    console.log(req);
+    const jwtToken = req.cookies.t;
+    console.log(jwtToken);
 
+    let decodedToken;
+
+    try {
+        decodedToken = jwt.verify(jwtToken, config.jwtSecret);
+    } catch (err) {
+        console.log(err);
+        return res.status(400).json({
+            error: "cannot verify token"
+        });
+    }
+    console.log(decodedToken);
+    let user = await User.findById(decodedToken._id);
+    if (!user) {
+        return res.status(400).json({
+            error: "deleting user not found"
+        });
+    }
+    const commentId = req.params.com_id;
+    let commentData = await Comment.findById(commentId);
+    if (decodedToken._id === commentData.commenter_id) {
+        try {
+            //delete the comment
+            await Comment.deleteOne({ _id: commentId });
+        } catch (err) {
+            return res.status(400).json({
+                error: errorHandler.getErrorMessage(err)
+            });
+        }
+    } else {
+        return res.status(400).json({
+            error: "deleting user is not the commenter"
+        });
+    }
+}
 
 export default {
     createImage,
@@ -224,5 +273,6 @@ export default {
     listComments,
     deleteImage,
     userDeleteImage,
-    deleteComment
+    deleteComment,
+    userDeleteComment
 }

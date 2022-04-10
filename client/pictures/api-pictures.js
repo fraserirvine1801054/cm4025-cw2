@@ -109,6 +109,23 @@ const deleteCom = async (credentials, params) => {
     }
 }
 
+const userDeleteCom = async (credentials, params) => {
+    console.log("delete comment as user call");
+    try {
+        let response = await fetch('/api/pictures/comments/' + params, {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + credentials
+            }
+        });
+        return await response.json();
+    } catch (err) {
+        console.log(err);
+    }
+}
+
 export {
     createImg,
     listImg,
@@ -116,5 +133,6 @@ export {
     listCom,
     deleteImg,
     userDeleteImg,
-    deleteCom
+    deleteCom,
+    userDeleteCom
 }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { listCom, createCom, deleteCom } from './api-pictures';
+import { listCom, createCom, deleteCom, userDeleteCom } from './api-pictures';
 import auth from './../auth/auth-helper';
 
 import {
@@ -105,6 +105,15 @@ export default function ImageComments(props) {
         });
     }
 
+    const userClickDelete = (commentId) => {
+        console.log(`attempting to delete as user: ${commentId}`);
+        userDeleteCom(jwt.token, commentId).then((data) => {
+            if (data.error) {
+                console.log(data.error);
+            }
+        });
+    }
+
     return (
         <Box
             paddingLeft={1}
@@ -151,7 +160,7 @@ export default function ImageComments(props) {
                                     avatar={
                                         <Avatar />
                                     }
-                                    title={item.commenter_id}
+                                    title={item.commenter_string}
                                     subheader={`uploaded: ${item.post_date}`}
                                 />
                                 {
@@ -162,6 +171,20 @@ export default function ImageComments(props) {
                                         >
                                             admin: delete comment
                                         </Button>
+                                    </span>)
+                                }
+                                {
+                                    auth.isAuthenticated() && (<span>
+                                        {
+                                            item.commenter_id === auth.isAuthenticated().user._id && (<span>
+                                                <Button
+                                                    color="primary"
+                                                    onClick={() => {userClickDelete(item._id)}}
+                                                >
+                                                    delete comment
+                                                </Button>
+                                            </span>)
+                                        }
                                     </span>)
                                 }
                                 <Box 
