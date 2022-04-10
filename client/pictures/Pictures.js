@@ -50,7 +50,13 @@ export default function Pictures() {
         img_title: ''
     });
     let [isAdmin, setIsAdmin] = useState({});
-    const jwt = auth.isAuthenticated();
+
+    let jwt;
+
+    if (auth.isAuthenticated()){
+        jwt = auth.isAuthenticated();
+    }
+
 
     useEffect(() => {
         console.log("useeffect called");
@@ -202,7 +208,7 @@ export default function Pictures() {
                                     </span>)
                                 }
                                 {
-                                    item.uploader === auth.isAuthenticated().user._id && (<span>
+                                    item.uploader === jwt.user._id && (<span>
                                         <Button
                                             color="primary"
                                             onClick={() => { userClickDelete(item._id) }}

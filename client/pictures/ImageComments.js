@@ -41,7 +41,12 @@ export default function ImageComments(props) {
         comment_text: ''
     });
     let [isAdmin, setIsAdmin] = useState({});
-    const jwt = auth.isAuthenticated();
+
+    let jwt;
+
+    if (auth.isAuthenticated()) {
+        jwt = auth.isAuthenticated();
+    }
 
     useEffect(() => {
         const abortController = new AbortController();
