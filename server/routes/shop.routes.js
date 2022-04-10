@@ -9,8 +9,8 @@ router.route('/api/shop/admin')
     .post(shopCtrl.create);
 
 //admin edit item
-router.route('/api/shop/admin/:userId')
-    .put(authCtrl.requireSignin,authCtrl.hasAdminAuthorization,shopCtrl.edit);
+router.route('/api/shop/admin/:itemId')
+    .put(shopCtrl.edit);
 
 //list items
 router.route('/api/shop/items')

@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import theme from '../theme';
 import auth from './../auth/auth-helper';
 import { checkAdmin } from '../user/api-user';
-import { getSingleItem } from './api-shop';
+import { editItem, getSingleItem } from './api-shop';
 
 import {
     Paper,
@@ -22,15 +22,27 @@ const useStyles = makeStyles(theme => ({
     title: {
         margin: `${theme.spacing(4)}px 0 ${theme.spacing(2)}px`,
         color: theme.palette.openTitle
+    },
+    Media: {
+        width: 400,
+        height: 300
     }
 }));
 
 export default function ShopAdminEdit({ match }) {
 
     const classes = useStyles();
-    let [isAdmin, setIsAdmin] = useState({});
+    let [isAdmin, setIsAdmin] = useState({ admin: false });
     let [currentItem, setCurrentItem] = useState([]);
-    const [values, setValues] = useState({});
+    const [values, setValues] = useState({
+        new_item_name: '',
+        new_item_price: 0.0,
+        new_item_stock: 0,
+        new_item_description: '',
+        new_item_picture: ''
+    });
+
+    const jwt = auth.isAuthenticated();
 
     useEffect(() => {
         console.log("shopadminedit useeffect call");
@@ -51,7 +63,7 @@ export default function ShopAdminEdit({ match }) {
             setIsAdmin({ admin: false });
         }
 
-        getSingleItem(match.params.itemId, signal).then((data) => {
+        getSingleItem(signal, match.params.itemId).then((data) => {
             console.log(data);
             if (data && data.error) {
                 console.log(data);
@@ -59,7 +71,7 @@ export default function ShopAdminEdit({ match }) {
                 console.log(data);
                 setCurrentItem(data);
                 setValues({
-                    new_item_id: data.item_id,
+                    new_item_name: data.item_name,
                     new_item_price: data.item_price,
                     new_item_stock: data.item_stock,
                     new_item_description: data.item_description,
@@ -78,11 +90,27 @@ export default function ShopAdminEdit({ match }) {
     }
 
     const clickSubmit = () => {
+        const editedItem = {
+            item_name: values.new_item_name,
+            item_price: parseFloat(values.new_item_price),
+            item_stock: parseInt(values.new_item_stock),
+            item_description: values.new_item_description,
+            item_picture: values.new_item_picture
+        }
 
+        console.log(editedItem);
+        console.log(jwt);
+        editItem(editedItem, jwt.token, match.params.itemId).then((data) => {
+            if (data.error) {
+                setValues({ ...values, error: data.error});
+            } else {
+                setValues({ ...values, error: '', open: true});
+            }
+        });
     }
 
     return (
-        <Paper>
+        <Paper className={classes.root} elevation={4}>
             {
                 !isAdmin.admin && (<span>
                     <Typography>
@@ -95,9 +123,9 @@ export default function ShopAdminEdit({ match }) {
                     <Typography>
                         Edit Item
                     </Typography>
-                    {console.log(current)}
                     <Card>
                         <CardMedia
+                            className={classes.Media}
                             component="img"
                             src={currentItem.item_picture}
                         />
@@ -145,14 +173,14 @@ export default function ShopAdminEdit({ match }) {
                         <TextField
                             id="new_item_description"
                             label="New item description"
-                            value={values.new_item_stock}
+                            value={values.new_item_description}
                             onChange={handleChange('new_item_description')}
                             fullWidth={true}
                         /><br />
                         <TextField
                             id="new_item_picture"
                             label="New item picture"
-                            values={values.new_item_picture}
+                            value={values.new_item_picture}
                             onChange={handleChange('new_item_picture')}
                             fullWidth={true}
                         /><br />
