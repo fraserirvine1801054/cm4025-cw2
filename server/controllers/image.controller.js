@@ -105,7 +105,10 @@ const deleteImage = async (req,res) => {
     if (user.admin) {
         const imageId = req.params.img_id;
         try {
+            //delete the image
             await Image.deleteOne({_id: imageId});
+            //delete all comments associated with image
+            await Comment.deleteMany({img_id: imageId});
         } catch (err) {
             return res.status(400).json({
                 error: errorHandler.getErrorMessage(err)
