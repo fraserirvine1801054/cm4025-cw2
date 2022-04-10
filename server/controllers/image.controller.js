@@ -118,6 +118,45 @@ const deleteImage = async (req,res) => {
     }
 }
 
+const deleteComment = async (req,res) => {
+    console.log(req);
+    const jwtToken= req.cookies.t;
+    console.log(jwtToken);
+
+    let decodedToken;
+
+    try {
+        decodedToken = jwt.verify(jwtToken, config.jwtSecret);
+    } catch (err) {
+        console.log(err);
+        return res.status(400).json({
+            error: "cannot verify token"
+        });
+    }
+    console.log(decodedToken);
+
+    let user = await User.findById(decodedToken._id);
+    if (!user) {
+        return res.status(400).json({
+            error: "deleting user not found"
+        });
+    }
+    if (user.admin) {
+        const commentId = req.params.comment_id;
+        try {
+            await Comment.deleteOne({_id: commentId});
+        } catch (err) {
+            return res.status(400).json({
+                error: errorHandler.getErrorMessage(err)
+            });
+        }
+    } else {
+        return res.status(400).json({
+            error: "deleting user is not an admin"
+        });
+    }
+}
+
 
 
 export default {
@@ -125,5 +164,6 @@ export default {
     listImages,
     createComment,
     listComments,
-    deleteImage
+    deleteImage,
+    deleteComment
 }

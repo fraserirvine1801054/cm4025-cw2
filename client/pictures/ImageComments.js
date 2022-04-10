@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { listCom, createCom } from './api-pictures';
+import { listCom, createCom, deleteCom } from './api-pictures';
 import auth from './../auth/auth-helper';
 
 import {
@@ -41,6 +41,7 @@ export default function ImageComments(props) {
         comment_text: ''
     });
     let [isAdmin, setIsAdmin] = useState({});
+    const jwt = auth.isAuthenticated();
 
     useEffect(() => {
         const abortController = new AbortController();
@@ -94,8 +95,13 @@ export default function ImageComments(props) {
         });
     }
 
-    const clickDelete = () => {
-
+    const clickDelete = (commentId) => {
+        console.log(`attempting to delete comment: ${commentId}`);
+        deleteCom(jwt.token, commentId).then((data) => {
+            if (data.error) {
+                console.log(data.error);
+            }
+        });
     }
 
     return (
@@ -151,7 +157,7 @@ export default function ImageComments(props) {
                                     isAdmin.admin && (<span>
                                         <Button
                                             color="primary"
-                                            onClick={clickDelete}
+                                            onClick={() => {clickDelete(item._id)}}
                                         >
                                             admin: delete comment
                                         </Button>

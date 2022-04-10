@@ -17,5 +17,8 @@ router.route('/api/pictures/comments/:img_id')
 
 router.route('/api/pictures/images/admin/:img_id')
     .delete(imgCtrl.deleteImage);
+
+router.route('/api/pictures/comments/admin/:comment_id')
+    .delete(imgCtrl.deleteComment);
     
 export default router;
