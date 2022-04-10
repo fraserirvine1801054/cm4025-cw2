@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import auth from './../auth/auth-helper';
 import ImageComments from './ImageComments';
 
-import { listImg, createImg, deleteImg } from './api-pictures.js';
+import { listImg, createImg, deleteImg, userDeleteImg } from './api-pictures.js';
 import { checkAdmin, getUserName } from './../user/api-user';
 
 import {
@@ -29,8 +29,6 @@ import {
     CardMedia,
     Box
 } from '@material-ui/core';
-
-import ArrowForward from '@material-ui/icons/ArrowForward';
 
 const useStyles = makeStyles(theme => ({
     root: theme.mixins.gutters({
@@ -58,7 +56,7 @@ export default function Pictures() {
         console.log("useeffect called");
         const abortController = new AbortController();
         const signal = abortController.signal;
-        
+
 
         if (auth.isAuthenticated()) {
             checkAdmin(auth.isAuthenticated().user._id, signal).then((data) => {
@@ -112,6 +110,15 @@ export default function Pictures() {
     const clickDelete = (imgId) => {
         console.log(`attempting to delete image: ${imgId}`);
         deleteImg(jwt.token, imgId).then((data) => {
+            if (data.error) {
+                console.log(data.error);
+            }
+        });
+    }
+
+    const userClickDelete = (imgId) => {
+        console.log(`attempting to delete image as user: ${imgId}`);
+        userDeleteImg(jwt.token, imgId).then((data) => {
             if (data.error) {
                 console.log(data.error);
             }
@@ -181,19 +188,30 @@ export default function Pictures() {
                                     avatar={
                                         <Avatar />
                                     }
-                                    title={item.uploader}
+                                    title={item.uploader_string}
                                     subheader={`uploaded: ${item.uploaded}`}
                                 />
                                 {
                                     isAdmin.admin && (<span>
                                         <Button
                                             color="primary"
-                                            onClick={() => {clickDelete(item._id)}}
+                                            onClick={() => { clickDelete(item._id) }}
                                         >
                                             admin: delete image
                                         </Button>
                                     </span>)
                                 }
+                                {
+                                    item.uploader === auth.isAuthenticated().user._id && (<span>
+                                        <Button
+                                            color="primary"
+                                            onClick={() => { userClickDelete(item._id) }}
+                                        >
+                                            delete image
+                                        </Button>
+                                    </span>)
+                                }
+                                {console.log(`uploader: ${item.uploader}, type: ${typeof item.uploader}`)}
                                 <CardContent>
                                     <Typography variant='h5'>
                                         {item.image_title}

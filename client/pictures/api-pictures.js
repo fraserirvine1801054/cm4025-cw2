@@ -11,7 +11,7 @@ const createImg = async (picture) => {
             body: JSON.stringify(picture)
         });
         return await response.json();
-    } catch(err) {
+    } catch (err) {
         console.log(err);
     }
 }
@@ -23,13 +23,13 @@ const listImg = async (signal) => {
             signal: signal,
         });
         return await response.json();
-    } catch(err) {
+    } catch (err) {
         console.log(err);
     }
 }
 //upload comments
 
-const createCom = async (comment,params) => {
+const createCom = async (comment, params) => {
     try {
         let response = await fetch('/api/pictures/comments/', {
             method: 'POST',
@@ -40,12 +40,12 @@ const createCom = async (comment,params) => {
             body: JSON.stringify(comment)
         });
         return await response.json();
-    } catch(err) {
+    } catch (err) {
         console.log(err);
     }
 }
 
-const listCom = async (signal,params) => {
+const listCom = async (signal, params) => {
     try {
         console.log("listcom test");
         let response = await fetch('/api/pictures/comments/' + params, {
@@ -53,7 +53,7 @@ const listCom = async (signal,params) => {
             signal: signal,
         });
         return await response.json();
-    } catch(err) {
+    } catch (err) {
         console.log(err);
     }
 }
@@ -62,6 +62,23 @@ const deleteImg = async (credentials, params) => {
     console.log("deleteimg call");
     try {
         let response = await fetch('/api/pictures/images/admin/' + params, {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + credentials
+            }
+        });
+        return await response.json();
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+const userDeleteImg = async (credentials, params) => {
+    console.log("deleteimg call as user");
+    try {
+        let response = await fetch('/api/pictures/images/' + params, {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json',
@@ -98,5 +115,6 @@ export {
     createCom,
     listCom,
     deleteImg,
+    userDeleteImg,
     deleteCom
 }
