@@ -21,6 +21,7 @@ import {
     Button,
     Grid
 } from '@material-ui/core';
+import { checkAdmin } from '../user/api-user';
 
 const useStyles = makeStyles(theme => ({
     root: theme.mixins.gutters({
@@ -39,10 +40,25 @@ export default function ImageComments(props) {
     const [values, setValues] = useState({
         comment_text: ''
     });
+    let [isAdmin, setIsAdmin] = useState({});
 
     useEffect(() => {
         const abortController = new AbortController();
         const signal = abortController.signal;
+
+        if (auth.isAuthenticated()) {
+            checkAdmin(auth.isAuthenticated().user._id, signal).then((data) => {
+                console.log(data);
+                if (data && data.error) {
+                    console.log(data.error);
+                } else {
+                    console.log(data);
+                    setIsAdmin(data);
+                }
+            });
+        } else {
+            setIsAdmin({ admin: false});
+        }
 
         listCom(signal, props.image_id).then((data) => {
             if (data && data.error) {
@@ -78,6 +94,10 @@ export default function ImageComments(props) {
         });
     }
 
+    const clickDelete = () => {
+
+    }
+
     return (
         <Box
             paddingLeft={1}
@@ -100,10 +120,10 @@ export default function ImageComments(props) {
                             label='Comment'
                             value={values.comment_text}
                             onChange={handleChange('comment_text')}
+                            fullWidth={true}
                         />
                         <Button
                             color="primary"
-                            variant="contained"
                             onClick={clickSubmit}
                         >
                             Submit
@@ -127,7 +147,19 @@ export default function ImageComments(props) {
                                     title={item.commenter_id}
                                     subheader={`uploaded: ${item.post_date}`}
                                 />
-                                <Box paddingLeft={2}>
+                                {
+                                    isAdmin.admin && (<span>
+                                        <Button
+                                            color="primary"
+                                            onClick={clickDelete}
+                                        >
+                                            admin: delete comment
+                                        </Button>
+                                    </span>)
+                                }
+                                <Box 
+                                    paddingLeft={2}
+                                >
                                     <Typography>
                                         <p>{item.comment_text}</p>
                                     </Typography>

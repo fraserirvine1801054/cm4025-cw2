@@ -12,5 +12,10 @@ router.route('/api/pictures/comments')
 
 router.route('/api/pictures/comments/:img_id')
     .get(imgCtrl.listComments)
+
+//admin operations
+
+router.route('/api/pictures/images/admin/:img_id')
+    .delete(imgCtrl.deleteImage);
     
 export default router;

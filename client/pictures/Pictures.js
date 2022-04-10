@@ -5,8 +5,8 @@ import { Link } from 'react-router-dom';
 import auth from './../auth/auth-helper';
 import ImageComments from './ImageComments';
 
-import { listImg, createImg } from './api-pictures.js';
-import { getUserName } from './../user/api-user';
+import { listImg, createImg, deleteImg } from './api-pictures.js';
+import { checkAdmin, getUserName } from './../user/api-user';
 
 import {
     Paper,
@@ -51,11 +51,28 @@ export default function Pictures() {
         img_url: '',
         img_title: ''
     });
+    let [isAdmin, setIsAdmin] = useState({});
+    const jwt = auth.isAuthenticated();
 
     useEffect(() => {
         console.log("useeffect called");
         const abortController = new AbortController();
         const signal = abortController.signal;
+        
+
+        if (auth.isAuthenticated()) {
+            checkAdmin(auth.isAuthenticated().user._id, signal).then((data) => {
+                console.log(data);
+                if (data && data.error) {
+                    console.log(data.error);
+                } else {
+                    console.log(data);
+                    setIsAdmin(data);
+                }
+            });
+        } else {
+            setIsAdmin({ admin: false });
+        }
 
         listImg(signal).then((data) => {
             console.log(data);
@@ -92,6 +109,15 @@ export default function Pictures() {
         });
     }
 
+    const clickDelete = (imgId) => {
+        console.log(`attempting to delete image: ${imgId}`);
+        deleteImg(jwt.token, imgId).then((data) => {
+            if (data.error) {
+                console.log(data.error);
+            }
+        });
+    }
+
     return (
         <Paper className={classes.root} elevation={4}>
             <Typography variant='h6' className={classes.title}>
@@ -102,6 +128,7 @@ export default function Pictures() {
                     <Typography>
                         Sign in to upload images
                     </Typography>
+                    <br />
                 </span>)
             }
             {
@@ -135,6 +162,7 @@ export default function Pictures() {
                             </Button>
                         </CardActions>
                     </Card>
+                    <br />
                 </span>)
             }
             <Grid
@@ -145,7 +173,6 @@ export default function Pictures() {
                 {images.map((item, i) => {
                     return (
                         <Grid item>
-
                             <Card
                                 key={i}
                                 elevation={4}
@@ -157,6 +184,16 @@ export default function Pictures() {
                                     title={item.uploader}
                                     subheader={`uploaded: ${item.uploaded}`}
                                 />
+                                {
+                                    isAdmin.admin && (<span>
+                                        <Button
+                                            color="primary"
+                                            onClick={() => {clickDelete(item._id)}}
+                                        >
+                                            admin: delete image
+                                        </Button>
+                                    </span>)
+                                }
                                 <CardContent>
                                     <Typography variant='h5'>
                                         {item.image_title}
@@ -164,11 +201,11 @@ export default function Pictures() {
                                 </CardContent>
                                 <div>
                                     <Box paddingLeft={2}>
-                                    <img
-                                        src={item.image_url}
-                                        alt="alt"
-                                        height="400"
-                                    />
+                                        <img
+                                            src={item.image_url}
+                                            alt="alt"
+                                            height="400"
+                                        />
                                     </Box>
                                 </div>
                                 <div>

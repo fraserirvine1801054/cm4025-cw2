@@ -120,6 +120,7 @@ const getSingleItem = async (req, res) => {
 }
 
 const deleteItem = async (req, res) => {
+    console.log("deleteitem");
     const jwtToken = req.cookies.t;
     console.log(jwtToken);
 

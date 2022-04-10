@@ -4,6 +4,8 @@ import User from './../models/user.model';
 import extend from 'lodash/extend';
 import errorHandler from '../helpers/dbErrorHandler';
 import { useReducer } from 'react';
+import jwt from 'jsonwebtoken';
+import config from '../../config/config';
 
 const listImages = async (req,res) => {
     try {
@@ -78,11 +80,50 @@ const createComment = async (req,res) => {
     }
 }
 
+const deleteImage = async (req,res) => {
+    console.log(req);
+    const jwtToken = req.cookies.t;
+    console.log(jwtToken);
+
+    let decodedToken;
+
+    try {
+        decodedToken = jwt.verify(jwtToken, config.jwtSecret);
+    } catch (err) {
+        console.log(err);
+        return res.status(400).json({
+            error: "cannot verify token"
+        });
+    }
+    console.log(decodedToken);
+    let user = await User.findById(decodedToken._id);
+    if (!user) {
+        return res.status(400).json({
+            error: "deleting user not found"
+        });
+    }
+    if (user.admin) {
+        const imageId = req.params.img_id;
+        try {
+            await Image.deleteOne({_id: imageId});
+        } catch (err) {
+            return res.status(400).json({
+                error: errorHandler.getErrorMessage(err)
+            });
+        }
+    } else {
+        return res.status(400).json({
+            error: "deleting user is not an admin"
+        });
+    }
+}
+
 
 
 export default {
     createImage,
     listImages,
     createComment,
-    listComments
+    listComments,
+    deleteImage
 }
