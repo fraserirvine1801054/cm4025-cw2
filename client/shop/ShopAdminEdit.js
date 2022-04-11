@@ -12,7 +12,8 @@ import {
     Card,
     CardMedia,
     TextField,
-    Button
+    Button,
+    Box
 } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
@@ -46,6 +47,12 @@ export default function ShopAdminEdit({ match }) {
     const jwt = auth.isAuthenticated();
 
     let history = useHistory();
+
+    //currency formatter
+    let currencyFormatter = new Intl.NumberFormat('en-GB', {
+        style: 'currency',
+        currency: 'GBP'
+    });
 
     useEffect(() => {
         console.log("shopadminedit useeffect call");
@@ -105,9 +112,9 @@ export default function ShopAdminEdit({ match }) {
         console.log(jwt);
         editItem(editedItem, jwt.token, match.params.itemId).then((data) => {
             if (data.error) {
-                setValues({ ...values, error: data.error});
+                setValues({ ...values, error: data.error });
             } else {
-                setValues({ ...values, error: '', open: true});
+                setValues({ ...values, error: '', open: true });
                 history.push('/shop');
             }
         });
@@ -117,6 +124,8 @@ export default function ShopAdminEdit({ match }) {
         deleteItem(jwt.token, match.params.itemId).then((data) => {
             if (data.error) {
                 console.log(data.error);
+            } else {
+                history.push('/shop');
             }
         });
     }
@@ -141,78 +150,91 @@ export default function ShopAdminEdit({ match }) {
                             component="img"
                             src={currentItem.item_picture}
                         />
-                        <Typography>
-                            {currentItem.item_name}
-                        </Typography>
-                        <Typography>
-                            {currentItem.item_price}
-                        </Typography>
-                        <Typography>
-                            {currentItem.item_stock}
-                        </Typography>
-                        <Typography>
-                            {currentItem.item_description}
-                        </Typography>
+                        <Box
+                            paddingLeft={3}
+                            paddingBottom={2}
+                        >
+                            <Typography>
+                                {currentItem.item_name}
+                            </Typography>
+                            <Typography>
+                                {currencyFormatter.format(currentItem.item_price)}
+                            </Typography>
+                            <Typography>
+                                {currentItem.item_stock}
+                            </Typography>
+                            <Typography>
+                                {currentItem.item_description}
+                            </Typography>
+                        </Box>
                     </Card>
-                    <br/>
+                    <br />
                     <Card>
-                        <Typography>
-                            New Details
-                        </Typography>
-                        <br />
-                        <TextField
-                            id="new_item_name"
-                            label="New item name"
-                            value={values.new_item_name}
-                            onChange={handleChange('new_item_name')}
-                            fullWidth={true}
-                        /><br />
-                        <TextField
-                            id="new_item_price"
-                            label="New item price"
-                            type="number"
-                            value={values.new_item_price}
-                            onChange={handleChange('new_item_price')}
-                            fullWidth={true}
-                        /><br />
-                        <TextField
-                            id="new_item_stock"
-                            label="New item stock"
-                            type="number"
-                            value={values.new_item_stock}
-                            onChange={handleChange('new_item_stock')}
-                            fullWidth={true}
-                        /><br />
-                        <TextField
-                            id="new_item_description"
-                            label="New item description"
-                            value={values.new_item_description}
-                            onChange={handleChange('new_item_description')}
-                            fullWidth={true}
-                        /><br />
-                        <TextField
-                            id="new_item_picture"
-                            label="New item picture"
-                            value={values.new_item_picture}
-                            onChange={handleChange('new_item_picture')}
-                            fullWidth={true}
-                        /><br />
-                        <Button
-                            color="primary"
-                            variant="contained"
-                            onClick={clickSubmit}
+                        <Box
+                            paddingTop={2}
+                            paddingLeft={3}
+                            paddingBottom={2}
                         >
-                            Update
-                        </Button>
-                        <br/>
-                        <br/>
-                        <Button
-                            color="secondary"
-                            variant="contained"
-                            onClick={clickDelete}
-                        >
-                            Delete item
-                        </Button>
+                            <Typography>
+                                New Details
+                            </Typography>
+                            <br />
+                            <TextField
+                                id="new_item_name"
+                                label="New item name"
+                                value={values.new_item_name}
+                                onChange={handleChange('new_item_name')}
+                                fullWidth={true}
+                            /><br />
+                            <TextField
+                                id="new_item_price"
+                                label="New item price"
+                                type="number"
+                                value={values.new_item_price}
+                                onChange={handleChange('new_item_price')}
+                                fullWidth={true}
+                            /><br />
+                            <TextField
+                                id="new_item_stock"
+                                label="New item stock"
+                                type="number"
+                                value={values.new_item_stock}
+                                onChange={handleChange('new_item_stock')}
+                                fullWidth={true}
+                            /><br />
+                            <TextField
+                                id="new_item_description"
+                                label="New item description"
+                                value={values.new_item_description}
+                                onChange={handleChange('new_item_description')}
+                                fullWidth={true}
+                            /><br />
+                            <TextField
+                                id="new_item_picture"
+                                label="New item picture"
+                                value={values.new_item_picture}
+                                onChange={handleChange('new_item_picture')}
+                                fullWidth={true}
+                            />
+                            <br />
+                            <br />
+                            <Button
+                                color="primary"
+                                variant="contained"
+                                onClick={clickSubmit}
+                            >
+                                Update
+                            </Button>
+                            <br />
+                            <br />
+                            <Button
+                                color="secondary"
+                                variant="contained"
+                                onClick={clickDelete}
+                            >
+                                Delete item
+                            </Button>
+                        </Box>
                     </Card>
                 </span>)
             }

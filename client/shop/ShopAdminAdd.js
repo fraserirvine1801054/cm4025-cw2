@@ -4,6 +4,7 @@ import theme from '../theme';
 import auth from './../auth/auth-helper';
 import { checkAdmin } from '../user/api-user';
 import { createShopItem } from './api-shop';
+import { useHistory } from 'react-router-dom';
 
 import {
     Paper,
@@ -37,6 +38,8 @@ export default function ShopAdminAdd() {
     const jwt = auth.isAuthenticated();
 
     console.log(jwt);
+
+    let history = useHistory();
 
     useEffect(() => {
         const abortController = new AbortController();
@@ -77,6 +80,7 @@ export default function ShopAdminAdd() {
                 setValues({ ...values, error: data.error});
             } else {
                 setValues({ ...values, error: '', open: true});
+                history.push('/shop');
             }
         });
     }
@@ -138,7 +142,7 @@ export default function ShopAdminAdd() {
                         variant="contained"
                         onClick={clickSubmit}
                     ><br/>
-                        Submit
+                        create item
                     </Button>
                 </span>)
             }

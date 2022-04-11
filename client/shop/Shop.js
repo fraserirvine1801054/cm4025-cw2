@@ -219,6 +219,7 @@ export default function Shop() {
                                 key={i}
                             >
                                 <CardHeader
+                                    titleTypographyProps={{variant: 'h6'}}
                                     title={item.item_name}
                                 />
                                 <CardMedia

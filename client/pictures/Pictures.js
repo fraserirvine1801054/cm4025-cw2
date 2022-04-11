@@ -51,8 +51,6 @@ export default function Pictures() {
     });
     let [isAdmin, setIsAdmin] = useState({});
 
-    const [reloader, setReloader] = useState();
-
     const jwt = auth.isAuthenticated();
 
     const getImgList = () => {
