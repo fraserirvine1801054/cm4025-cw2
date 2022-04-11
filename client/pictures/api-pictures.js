@@ -48,7 +48,7 @@ const createCom = async (comment, params) => {
 const listCom = async (signal, params) => {
     try {
         console.log("listcom test");
-        let response = await fetch('/api/pictures/comments/' + params, {
+        let response = await fetch(`/api/pictures/comments/${params}`, {
             method: 'GET',
             signal: signal,
         });
@@ -61,7 +61,7 @@ const listCom = async (signal, params) => {
 const deleteImg = async (credentials, params) => {
     console.log("deleteimg call");
     try {
-        let response = await fetch('/api/pictures/images/admin/' + params, {
+        let response = await fetch(`/api/pictures/images/admin/${params}`, {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json',
@@ -78,7 +78,7 @@ const deleteImg = async (credentials, params) => {
 const userDeleteImg = async (credentials, params) => {
     console.log("deleteimg call as user");
     try {
-        let response = await fetch('/api/pictures/images/' + params, {
+        let response = await fetch(`/api/pictures/images/${params}`, {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json',
@@ -95,7 +95,7 @@ const userDeleteImg = async (credentials, params) => {
 const deleteCom = async (credentials, params) => {
     console.log("delete comment call");
     try {
-        let response = await fetch('/api/pictures/comments/admin/' + params, {
+        let response = await fetch(`/api/pictures/comments/admin/${params}`, {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json',
@@ -112,7 +112,7 @@ const deleteCom = async (credentials, params) => {
 const userDeleteCom = async (credentials, params) => {
     console.log("delete comment as user call");
     try {
-        let response = await fetch('/api/pictures/comments/' + params, {
+        let response = await fetch(`/api/pictures/comments/${params}`, {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json',
@@ -128,7 +128,7 @@ const userDeleteCom = async (credentials, params) => {
 
 const getSingleComment = async (signal, params) => {
     try {
-        let response = await fetch('/api/pictures/singlecomment/' + params, {
+        let response = await fetch(`/api/pictures/singlecomment/${params}`, {
             method: 'GET',
             signal: signal,
         });
@@ -140,7 +140,7 @@ const getSingleComment = async (signal, params) => {
 
 const editSingleComment = async (comment, credentials, params) => {
     try {
-        let response = await fetch('/api/pictures/comments/edit/' + params, {
+        let response = await fetch(`/api/pictures/comments/edit/${params}`, {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',

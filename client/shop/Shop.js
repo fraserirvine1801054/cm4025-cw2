@@ -198,7 +198,7 @@ export default function Shop() {
                             </Typography>
                             <CardActions>
                                 <Button color="primary" variant="contained">
-                                    Checkout
+                                    proceed to checkout
                                 </Button>
                             </CardActions>
                         </Card>

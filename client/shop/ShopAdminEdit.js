@@ -4,6 +4,7 @@ import theme from '../theme';
 import auth from './../auth/auth-helper';
 import { checkAdmin } from '../user/api-user';
 import { deleteItem, editItem, getSingleItem } from './api-shop';
+import { useHistory } from 'react-router-dom';
 
 import {
     Paper,
@@ -43,6 +44,8 @@ export default function ShopAdminEdit({ match }) {
     });
 
     const jwt = auth.isAuthenticated();
+
+    let history = useHistory();
 
     useEffect(() => {
         console.log("shopadminedit useeffect call");
@@ -105,6 +108,7 @@ export default function ShopAdminEdit({ match }) {
                 setValues({ ...values, error: data.error});
             } else {
                 setValues({ ...values, error: '', open: true});
+                history.push('/shop');
             }
         });
     }

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import theme from '../theme';
 import auth from './../auth/auth-helper';
+import { useHistory } from 'react-router-dom';
 import {
     Card,
     CardHeader,
@@ -40,6 +41,7 @@ export default function UserEditComment({ match }) {
         new_comment_text: ''
     });
     const jwt = auth.isAuthenticated();
+    let history = useHistory();
 
     useEffect(() => {
         const abortController = new AbortController();
@@ -79,6 +81,8 @@ export default function UserEditComment({ match }) {
         editSingleComment(editedComment, jwt.token, match.params.comId).then((data) => {
             if (data.error) {
                 console.log(data.error);
+            } else {
+                history.push('/pictures');
             }
         });
     }

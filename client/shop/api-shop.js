@@ -31,7 +31,7 @@ const listShopItems = async (signal) => {
 
 const getSingleItem = async (signal, params) => {
     try {
-        let response = await fetch('/api/shop/singleitem/' + params, {
+        let response = await fetch(`/api/shop/singleitem/${params}`, {
             method: 'GET',
             signal: signal,
         });
@@ -43,7 +43,7 @@ const getSingleItem = async (signal, params) => {
 
 const editItem = async (item, credentials, params) => {
     try {
-        let response = await fetch('/api/shop/admin/' + params, {
+        let response = await fetch(`/api/shop/admin/${params}`, {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
@@ -60,7 +60,7 @@ const editItem = async (item, credentials, params) => {
 
 const deleteItem = async (credentials, params) => {
     try {
-        let response = await fetch('/api/shop/admin/' + params, {
+        let response = await fetch(`/api/shop/admin/${params}`, {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json',
