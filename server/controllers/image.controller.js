@@ -219,6 +219,9 @@ const deleteComment = async (req, res) => {
         const commentId = req.params.comment_id;
         try {
             await Comment.deleteOne({ _id: commentId });
+            return res.status(200).json({
+                message: "successfully deleted comment as admin"
+            });
         } catch (err) {
             return res.status(400).json({
                 error: errorHandler.getErrorMessage(err)

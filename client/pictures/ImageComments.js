@@ -46,6 +46,24 @@ export default function ImageComments(props) {
 
     const jwt = auth.isAuthenticated();
 
+    const listComments = () => {
+        const abortController = new AbortController();
+        const signal = abortController.signal;
+
+        listCom(signal, props.image_id).then((data) => {
+            if (data && data.error) {
+                console.log(data.error);
+            } else {
+                console.log(data);
+                setComments(data);
+            }
+        });
+
+        return () => {
+            abortController.abort();
+        }
+    }
+
     useEffect(() => {
         const abortController = new AbortController();
         const signal = abortController.signal;
@@ -64,6 +82,9 @@ export default function ImageComments(props) {
             setIsAdmin({ admin: false });
         }
 
+        listComments();
+
+        /*
         listCom(signal, props.image_id).then((data) => {
             if (data && data.error) {
                 console.log(data.error);
@@ -72,6 +93,7 @@ export default function ImageComments(props) {
                 setComments(data);
             }
         });
+        */
         return () => {
             abortController.abort();
         }
@@ -94,6 +116,7 @@ export default function ImageComments(props) {
                 setValues({ ...values, error: data.error });
             } else {
                 setValues({ ...values, error: '', open: true });
+                listComments();
             }
         });
     }
@@ -103,6 +126,8 @@ export default function ImageComments(props) {
         deleteCom(jwt.token, commentId).then((data) => {
             if (data.error) {
                 console.log(data.error);
+            } else {
+                listComments();
             }
         });
     }
@@ -112,6 +137,8 @@ export default function ImageComments(props) {
         userDeleteCom(jwt.token, commentId).then((data) => {
             if (data.error) {
                 console.log(data.error);
+            } else {
+                listComments();
             }
         });
     }
