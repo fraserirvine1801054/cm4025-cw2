@@ -128,7 +128,7 @@ const userDeleteCom = async (credentials, params) => {
 
 const getSingleComment = async (signal, params) => {
     try {
-        let response = await fetch('/api/pictures/comments/' + params, {
+        let response = await fetch('/api/pictures/singlecomment/' + params, {
             method: 'GET',
             signal: signal,
         });
@@ -138,7 +138,7 @@ const getSingleComment = async (signal, params) => {
     }
 }
 
-const editSingleComment = async (comment, params, credentials) => {
+const editSingleComment = async (comment, credentials, params) => {
     try {
         let response = await fetch('/api/pictures/comments/edit/' + params, {
             method: 'PUT',

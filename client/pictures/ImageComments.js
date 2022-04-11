@@ -4,6 +4,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import { listCom, createCom, deleteCom, userDeleteCom } from './api-pictures';
 import auth from './../auth/auth-helper';
 
+import { Link } from 'react-router-dom';
+
 import {
     List,
     ListItem,
@@ -59,7 +61,7 @@ export default function ImageComments(props) {
                 }
             });
         } else {
-            setIsAdmin({ admin: false});
+            setIsAdmin({ admin: false });
         }
 
         listCom(signal, props.image_id).then((data) => {
@@ -169,7 +171,7 @@ export default function ImageComments(props) {
                                         <Button
                                             color="secondary"
                                             size="small"
-                                            onClick={() => {clickDelete(item._id)}}
+                                            onClick={() => { clickDelete(item._id) }}
                                         >
                                             admin: delete comment
                                         </Button>
@@ -179,10 +181,18 @@ export default function ImageComments(props) {
                                     auth.isAuthenticated() && (<span>
                                         {
                                             item.commenter_id === auth.isAuthenticated().user._id && (<span>
+                                                <Link to={`/editcomment/${item._id}`}>
+                                                    <Button
+                                                        color="primary"
+                                                        size="small"
+                                                    >
+                                                        edit comment
+                                                    </Button>
+                                                </Link>
                                                 <Button
                                                     color="secondary"
                                                     size="small"
-                                                    onClick={() => {userClickDelete(item._id)}}
+                                                    onClick={() => { userClickDelete(item._id) }}
                                                 >
                                                     delete comment
                                                 </Button>
@@ -190,7 +200,7 @@ export default function ImageComments(props) {
                                         }
                                     </span>)
                                 }
-                                <Box 
+                                <Box
                                     paddingLeft={2}
                                 >
                                     <Typography>

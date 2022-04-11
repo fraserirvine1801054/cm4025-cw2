@@ -10,7 +10,8 @@ import {
     Typography,
     Avatar,
     TextField,
-    Button
+    Button,
+    Box
 } from '@material-ui/core';
 import { editSingleComment, getSingleComment } from './api-pictures';
 
@@ -49,8 +50,10 @@ export default function UserEditComment({ match }) {
                 if (data && data.error) {
                     console.log(data.error);
                 } else {
+                    console.log(auth.isAuthenticated().user._id);
+                    console.log(data.commenter_id);
                     setThisComment(data);
-                    setValues(data.new_comment_text);
+                    setValues({new_comment_text: data.comment_text});
                     if (auth.isAuthenticated().user._id === data.commenter_id) {
                         setIsUser(true);
                     }
@@ -66,14 +69,14 @@ export default function UserEditComment({ match }) {
         setValues({ ...values, [name]: event.target.value});
     }
 
-    const makeEdit = () => {
+    const clickEdit = () => {
         const editedComment = {
             img_id: thisComment.img_id,
             commenter_id: thisComment.commenter_id,
             post_date: thisComment.post_date,
             comment_text: values.new_comment_text
         }
-        editSingleComment(editedComment, jwt.token, match.params.itemId).then((data) => {
+        editSingleComment(editedComment, jwt.token, match.params.comId).then((data) => {
             if (data.error) {
                 console.log(data.error);
             }
@@ -81,7 +84,8 @@ export default function UserEditComment({ match }) {
     }
 
     return (
-        <Paper>
+        <Paper className={classes.root} elevation={4}>
+            {console.log(isUser)}
             {
                 !isUser && (<span>
                     <Typography>
@@ -91,6 +95,7 @@ export default function UserEditComment({ match }) {
             }
             {
                 isUser && (<span>
+                    
                     <Typography>
                         Edit Comment
                     </Typography>
@@ -108,7 +113,7 @@ export default function UserEditComment({ match }) {
                             </Typography>
                         </Box>
                     </Card>
-
+                    <br/>
                     <Card>
                         <TextField
                             id="new_comment_text"
@@ -117,6 +122,7 @@ export default function UserEditComment({ match }) {
                             onChange={handleChange('new_comment_text')}
                             fullWidth={true}
                         />
+                        <br/>
                         <Button
                             color="primary"
                             variant="contained"

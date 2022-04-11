@@ -17,7 +17,7 @@ router.route('/api/pictures/comments/:img_id')
     .get(imgCtrl.listComments);
 
 //get single comment
-router.route('/api/pictures/comments/:com_id')
+router.route('/api/pictures/singlecomment/:com_id')
     .get(imgCtrl.getSingleComment);
 
 //edit single comment

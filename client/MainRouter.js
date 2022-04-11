@@ -1,5 +1,5 @@
 import React from 'react';
-import {Route,Switch} from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import Home from './core/Home';
 import Users from './user/Users';
 import UserAdmin from './user/UsersAdmin';
@@ -16,22 +16,22 @@ import ShopAdminEdit from './shop/ShopAdminEdit';
 import UserEditComment from './pictures/UserEditComment';
 
 const MainRouter = () => {
-    return(
+    return (
         <div>
-            <Menu/>
+            <Menu />
             <Switch>
-                <Route exact path="/"component={Home}/>
-                <Route path="/users" component={Users}/>
-                <Route path="/useradmin/:userId" component={UserAdmin}/>
+                <Route exact path="/" component={Home} />
+                <Route path="/users" component={Users} />
+                <Route path="/useradmin/:userId" component={UserAdmin} />
                 <Route path="/pictures" component={Pictures} />
-                <Route path="/pictures/edit/:comId" component={UserEditComment}/>
+                <Route path="/editcomment/:comId" component={UserEditComment} />
                 <Route path="/shop" component={Shop} />
                 <Route path="/shopadmin/add" component={ShopAdminAdd} />
                 <Route path="/shopadmin/edit/:itemId" component={ShopAdminEdit} />
-                <Route path="/signup" component={Signup}/>
-                <Route path="/signin" component={Signin}/>
-                <PrivateRoute path="/user/edit/:userId" component={EditProfile}/>
-                <Route path="/user/:userId" component={Profile}/>
+                <Route path="/signup" component={Signup} />
+                <Route path="/signin" component={Signin} />
+                <PrivateRoute path="/user/edit/:userId" component={EditProfile} />
+                <Route path="/user/:userId" component={Profile} />
             </Switch>
         </div>
     );
