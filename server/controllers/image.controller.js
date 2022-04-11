@@ -132,6 +132,9 @@ const deleteImage = async (req, res) => {
             await Image.deleteOne({ _id: imageId });
             //delete all comments associated with image
             await Comment.deleteMany({ img_id: imageId });
+            return res.status(200).json({
+                message: "successfully deleted image as admin"
+            });
         } catch (err) {
             return res.status(400).json({
                 error: errorHandler.getErrorMessage(err)
@@ -174,6 +177,9 @@ const userDeleteImage = async (req, res) => {
             await Image.deleteOne({ _id: imageId });
             //delete all comments associated with image
             await Comment.deleteMany({ img_id: imageId });
+            return res.status(200).json({
+                message: "successfully deleted image"
+            });
         } catch (err) {
             return res.status(400).json({
                 error: errorHandler.getErrorMessage(err)
@@ -254,6 +260,9 @@ const userDeleteComment = async (req, res) => {
         try {
             //delete the comment
             await Comment.deleteOne({ _id: commentId });
+            return res.status(200),json({
+                message: "successfully deleted comment"
+            });
         } catch (err) {
             return res.status(400).json({
                 error: errorHandler.getErrorMessage(err)

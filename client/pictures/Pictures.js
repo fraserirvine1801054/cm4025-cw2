@@ -51,14 +51,34 @@ export default function Pictures() {
     });
     let [isAdmin, setIsAdmin] = useState({});
 
+    const [reloader, setReloader] = useState();
+
     const jwt = auth.isAuthenticated();
+
+    const getImgList = () => {
+        const abortController = new AbortController();
+        const signal = abortController.signal;
+
+        listImg(signal).then((data) => {
+            console.log(data);
+            if (data && data.error) {
+                console.log(data.error);
+            } else {
+                console.log(images);
+                setImages([...data]);
+            }
+        });
+
+        return function cleanup() {
+            abortController.abort();
+        }
+    }
 
 
     useEffect(() => {
         console.log("useeffect called");
         const abortController = new AbortController();
         const signal = abortController.signal;
-
 
         if (auth.isAuthenticated()) {
             checkAdmin(auth.isAuthenticated().user._id, signal).then((data) => {
@@ -73,7 +93,8 @@ export default function Pictures() {
         } else {
             setIsAdmin({ admin: false });
         }
-
+        getImgList();
+        /*
         listImg(signal).then((data) => {
             console.log(data);
             if (data && data.error) {
@@ -82,7 +103,7 @@ export default function Pictures() {
                 setImages(data);
             }
         });
-
+        */
         return function cleanup() {
             abortController.abort();
         }
@@ -105,6 +126,7 @@ export default function Pictures() {
                 setValues({ ...values, error: data.error });
             } else {
                 setValues({ ...values, error: '', open: true });
+                getImgList();
             }
         });
     }
@@ -112,6 +134,7 @@ export default function Pictures() {
     const clickDelete = (imgId) => {
         console.log(`attempting to delete image: ${imgId}`);
         deleteImg(jwt.token, imgId).then((data) => {
+            getImgList();
             if (data.error) {
                 console.log(data.error);
             }
@@ -121,12 +144,13 @@ export default function Pictures() {
     const userClickDelete = (imgId) => {
         console.log(`attempting to delete image as user: ${imgId}`);
         userDeleteImg(jwt.token, imgId).then((data) => {
+            getImgList();
             if (data.error) {
                 console.log(data.error);
             }
         });
+        
     }
-
     return (
         <Paper className={classes.root} elevation={4}>
             <Typography variant='h6' className={classes.title}>
