@@ -126,6 +126,35 @@ const userDeleteCom = async (credentials, params) => {
     }
 }
 
+const getSingleComment = async (signal, params) => {
+    try {
+        let response = await fetch('/api/pictures/comments/' + params, {
+            method: 'GET',
+            signal: signal,
+        });
+        return await response.json();
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+const editSingleComment = async (comment, params, credentials) => {
+    try {
+        let response = await fetch('/api/pictures/comments/edit/' + params, {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + credentials
+            },
+            body: JSON.stringify(comment)
+        });
+        return await response.json();
+    } catch (err) {
+        console.log(err);
+    }
+}
+
 export {
     createImg,
     listImg,
@@ -134,5 +163,7 @@ export {
     deleteImg,
     userDeleteImg,
     deleteCom,
-    userDeleteCom
+    userDeleteCom,
+    getSingleComment,
+    editSingleComment
 }

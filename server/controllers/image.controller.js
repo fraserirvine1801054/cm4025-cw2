@@ -266,6 +266,56 @@ const userDeleteComment = async (req, res) => {
     }
 }
 
+const getSingleComment = async (req, res) => {
+    try {
+        let comment_id = req.params.com_id;
+        let comment = await Comment.findById(comment_id);
+        res.json(comment);
+    } catch (err) {
+        return res.status(400).json({
+            error: errorHandler.getErrorMessage(err)
+        });
+    }
+}
+
+const editSingleComment = async (req, res) => {
+    //verify that the editing user is the original commenter
+    let comment_id = req.params.com_id;
+    let thisComment = await Comment.findById(comment_id);
+    const jwtToken = req.cookies.t;
+
+    let decodedToken;
+
+    try {
+        decodedToken = jwt.verify(jwtToken, config.jwtSecret);
+    } catch (err) {
+        console.log(err);
+        return res.status(400).json({
+            error: "cannot verify token"
+        });
+    }
+    console.log(decodedToken);
+    if (decodedToken._id === thisComment.commenter_id) {
+        thisComment.comment_text = req.body.comment_text;
+    } else {
+        return res.status(400).json({
+            error: "editing user is not the original poster"
+        });
+    }
+
+    try {
+        console.log(thisComment);
+        await thisComment.save();
+        return res.status(200).json({
+            message: "Successfully edited comment!"
+        });
+    } catch (err) {
+        return res.status(400).json({
+            error: errorHandler.getErrorMessage(err)
+        });
+    }
+}
+
 export default {
     createImage,
     listImages,
@@ -274,5 +324,7 @@ export default {
     deleteImage,
     userDeleteImage,
     deleteComment,
-    userDeleteComment
+    userDeleteComment,
+    getSingleComment,
+    editSingleComment
 }

@@ -13,6 +13,7 @@ import Pictures from './pictures/Pictures';
 import Shop from './shop/Shop';
 import ShopAdminAdd from './shop/ShopAdminAdd';
 import ShopAdminEdit from './shop/ShopAdminEdit';
+import UserEditComment from './pictures/UserEditComment';
 
 const MainRouter = () => {
     return(
@@ -23,6 +24,7 @@ const MainRouter = () => {
                 <Route path="/users" component={Users}/>
                 <Route path="/useradmin/:userId" component={UserAdmin}/>
                 <Route path="/pictures" component={Pictures} />
+                <Route path="/pictures/edit/:comId" component={UserEditComment}/>
                 <Route path="/shop" component={Shop} />
                 <Route path="/shopadmin/add" component={ShopAdminAdd} />
                 <Route path="/shopadmin/edit/:itemId" component={ShopAdminEdit} />

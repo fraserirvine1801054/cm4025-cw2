@@ -16,6 +16,14 @@ router.route('/api/pictures/comments')
 router.route('/api/pictures/comments/:img_id')
     .get(imgCtrl.listComments);
 
+//get single comment
+router.route('/api/pictures/comments/:com_id')
+    .get(imgCtrl.getSingleComment);
+
+//edit single comment
+router.route('/api/pictures/comments/edit/:com_id')
+    .put(imgCtrl.editSingleComment);
+
 router.route('/api/pictures/comments/:com_id')
     .delete(imgCtrl.userDeleteComment);
 
